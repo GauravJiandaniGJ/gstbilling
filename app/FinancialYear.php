@@ -28,4 +28,9 @@ class FinancialYear extends Model
         return $this->hasMany(DebitPrimary::class,'financial_year_id');
     }
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class,'company_id');
+    }
+
 }

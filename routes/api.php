@@ -34,6 +34,14 @@ Route::group(['prefix'=>'company'],function() {
 
     Route::post('/authenticate/{company_id}', ['uses' => 'CompanyController@authenticate']);
 
+});
+
+Route::group(['prefix' => 'company/{user_id}/year'], function (){
+
+    Route::post('/createFinancialYear', ['uses' => 'FinancialYearController@createFinancialYear']);
+
+    Route::get('/dashboard', ['uses' => 'FinancialYearController@index']);
+
 
 });
 

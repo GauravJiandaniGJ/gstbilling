@@ -126,7 +126,7 @@ class CompanyController extends Controller
             return Helper::apiError("Company not found!",null,404);
 
         }
-        
+
         if(strcmp($company['username'] , $input['username'] )&& strcmp($company['password'] , $input['password'] ))
         {
 

@@ -32,4 +32,9 @@ class Company extends Model
         return $this->hasMany(Bank::class,'company_id');
     }
 
+    public function financial_year()
+    {
+        return $this->hasMany(FinancialYear::class,'company_id');
+    }
+
 }

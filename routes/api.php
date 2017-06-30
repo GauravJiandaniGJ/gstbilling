@@ -53,14 +53,29 @@ Route::group(['prefix'=>'company'],function() {
 
 });
 
+
 Route::group(['prefix' => 'company/{user_id}/year'], function (){
 
     Route::post('/createFinancialYear', ['uses' => 'FinancialYearController@createFinancialYear']);
 
     Route::get('/dashboard', ['uses' => 'FinancialYearController@index']);
 
+    Route::get('/statementYearWise/{financial_year_id}', ['uses' => 'FinancialYearController@statementYearWise']);
 
 });
+
+
+
+Route::group(['prefix'=>'year/{financial_year_id}'],function() {
+
+    Route::post('/createFinancialMonth', ['uses' => 'FinancialMonthController@createFinancialMonth']);
+
+    Route::get('/dashboard', ['uses' => 'FinancialMonthController@index']);
+
+    Route::get('/statementMonthWise/{financial_month_id}', ['uses' => 'FinancialMonthController@statementYearWise']);
+
+});
+
 
 Route::group(['prefix'=>'user'],function() {
 

@@ -45,4 +45,9 @@ class FinancialYearController extends Controller
 
     }
 
+    public function statementYearWise($company_id, $financial_year_id)
+    {
+
+    }
+
 }

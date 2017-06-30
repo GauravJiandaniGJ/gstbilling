@@ -26,11 +26,13 @@ Route::group(['prefix'=>'company'],function() {
 
     Route::get('/dashboard', ['uses' => 'CompanyController@index']);
 
-    Route::get('/show/{user_id}', ['uses' => 'CompanyController@show']);
+    Route::get('/show/{company_id}', ['uses' => 'CompanyController@show']);
 
-    Route::patch('/updateCompany/{user_id}', ['uses' => 'CompanyController@updateCompany']);
+    Route::patch('/updateCompany/{company_id}', ['uses' => 'CompanyController@updateCompany']);
 
-    Route::delete('/destroy/{user_id}', ['uses' => 'CompanyController@destroy']);
+    Route::delete('/destroy/{company_id}', ['uses' => 'CompanyController@destroy']);
+
+    Route::post('/authenticate/{company_id}', ['uses' => 'CompanyController@authenticate']);
 
 
 });

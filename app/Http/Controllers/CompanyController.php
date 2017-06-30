@@ -39,8 +39,6 @@ class CompanyController extends Controller
 
         }
 
-        $input['password'] = bcrypt($input['password']);
-
         $company = Company::create($input);
 
         if(!$company)
@@ -54,7 +52,7 @@ class CompanyController extends Controller
 
     }
 
-    public function updateCompany(Request $request, $user_id)
+    public function updateCompany(Request $request, $company_id)
     {
 
         $input = $request->only('name', 'address', 'gstin', 'state', 'short_name');
@@ -65,7 +63,7 @@ class CompanyController extends Controller
 
         });
 
-        $company = Company::where('id',$user_id)->first();
+        $company = Company::where('id',$company_id)->first();
 
         if(!$company)
         {
@@ -80,10 +78,10 @@ class CompanyController extends Controller
 
     }
 
-    public function show($user_id)
+    public function show($company_id)
     {
 
-        $company = Company::where('id',$user_id)->first();
+        $company = Company::where('id',$company_id)->first();
 
         if(!$company)
         {
@@ -97,10 +95,10 @@ class CompanyController extends Controller
     }
 
 
-    public function destroy($user_id)
+    public function destroy($company_id)
     {
 
-        $company = Company::where('id',$user_id)->first();
+        $company = Company::where('id',$company_id)->first();
 
         if(!$company)
         {
@@ -112,6 +110,31 @@ class CompanyController extends Controller
         $company->delete();
 
         return response("",204);
+
+    }
+
+    public function authenticate(Request $request, $company_id)
+    {
+
+        $input = $request->only('username','password');
+
+        $company = Company::where('id', $company_id)->first();
+
+        if(!$company)
+        {
+
+            return Helper::apiError("Company not found!",null,404);
+
+        }
+        
+        if(strcmp($company['username'] , $input['username'] )&& strcmp($company['password'] , $input['password'] ))
+        {
+
+            return response(array('status' => true), 200);
+
+        }
+
+        return response(array('status' => false), 200);
 
     }
 

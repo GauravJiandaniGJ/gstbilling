@@ -39,6 +39,8 @@ class CreateBillPrimaryTable extends Migration
             $table->integer('financial_month_id')->unsigned();
             $table->foreign('financial_month_id')->references('id')->on('financial_months');
 
+            $table->string('status');       // edit, final
+
             $table->timestamps();
 
         });

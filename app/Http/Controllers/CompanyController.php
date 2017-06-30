@@ -28,7 +28,7 @@ class CompanyController extends Controller
     public function create(Request $request)
     {
 
-        $input = $request->only('name', 'address', 'gstin', 'state');
+        $input = $request->only('name', 'address', 'gstin', 'state', 'short_name', 'username', 'password');
 
         $check_if_company_exits = Company::where('name',$input['name'])->where('gstin',$input['gstin'])->first();
 
@@ -38,6 +38,8 @@ class CompanyController extends Controller
             return $check_if_company_exits;
 
         }
+
+        $input['password'] = bcrypt($input['password']);
 
         $company = Company::create($input);
 
@@ -51,5 +53,67 @@ class CompanyController extends Controller
         return $company;
 
     }
+
+    public function updateCompany(Request $request, $user_id)
+    {
+
+        $input = $request->only('name', 'address', 'gstin', 'state', 'short_name');
+
+        $input = array_filter($input, function($value){
+
+            return $value != null;
+
+        });
+
+        $company = Company::where('id',$user_id)->first();
+
+        if(!$company)
+        {
+
+            return Helper::apiError("User not found!",null,404);
+
+        }
+
+        $company->update($input);
+
+        return $company;
+
+    }
+
+    public function show($user_id)
+    {
+
+        $company = Company::where('id',$user_id)->first();
+
+        if(!$company)
+        {
+
+            return Helper::apiError("Company not found!",null,404);
+
+        }
+
+        return $company;
+
+    }
+
+
+    public function destroy($user_id)
+    {
+
+        $company = Company::where('id',$user_id)->first();
+
+        if(!$company)
+        {
+
+            return Helper::apiError("Company not found!",null,404);
+
+        }
+
+        $company->delete();
+
+        return response("",204);
+
+    }
+
 
 }

@@ -10,7 +10,7 @@ class FinancialYear extends Model
     protected $table = 'financial_years';
 
     protected $fillable = [
-      'title'
+      'title', 'company_id'
     ];
 
     public function financial_month()

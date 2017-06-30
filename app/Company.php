@@ -10,7 +10,11 @@ class Company extends Model
     protected $table = "companys";
 
     protected $fillable = [
-        'name', 'address', 'gstin', 'state'
+        'name', 'address', 'gstin', 'state', 'short_name', 'username', 'password'
+    ];
+
+    protected $hidden = [
+        'password', 'remember_token',
     ];
 
     public function bill()

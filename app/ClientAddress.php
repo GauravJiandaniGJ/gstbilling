@@ -10,7 +10,7 @@ class ClientAddress extends Model
     protected $table = "clients_address";
 
     protected $fillable = [
-        'address', 'gstin', 'state'
+        'client_id', 'address', 'gstin', 'state'
     ];
 
     public function client()

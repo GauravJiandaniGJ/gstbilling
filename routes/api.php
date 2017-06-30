@@ -18,6 +18,23 @@
     });
 
 
+Route::group(['prefix' => 'client'], function (){
+
+    Route::post('/createClient', ['uses' => 'ClientsController@create']);
+
+    Route::post('/createAddress/{client_id}', ['uses' => 'ClientsController@createAddress']);
+
+    Route::get('/clientList', ['uses' => 'ClientsController@index']);
+
+    Route::get('/show/{client_id}', ['uses' => 'ClientsController@show']);
+
+    Route::delete('/destroy/{client_id}', ['uses' => 'ClientsController@destroy']);
+
+    Route::patch('/updateClientAddress/{client_id}', ['uses' => 'ClientsController@updateClientAddress']);
+
+    Route::get('/getAddresses/{client_id}', ['uses' => 'ClientsController@getAddresses']);
+
+});
 
 
 Route::group(['prefix'=>'company'],function() {

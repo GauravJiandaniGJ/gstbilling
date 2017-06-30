@@ -15,6 +15,9 @@ class CreateFinancialMonthTable extends Migration
 
             $table->string('title');
 
+            $table->integer('financial_year_id')->unsigned();
+            $table->foreign('financial_year_id')->references('id')->on('financial_years');
+
             $table->timestamps();
 
         });

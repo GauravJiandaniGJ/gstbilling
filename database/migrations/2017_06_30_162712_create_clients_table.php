@@ -15,12 +15,6 @@ class CreateClientsTable extends Migration
 
             $table->string('name');
 
-            $table->text('address');
-
-            $table->string('gstin');
-
-            $table->string('state');
-
             $table->timestamps();
 
         });

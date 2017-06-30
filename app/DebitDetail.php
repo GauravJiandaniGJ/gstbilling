@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DebitDetails extends Model
+class DebitDetail extends Model
 {
 
     protected $table = 'debit_details';
@@ -12,5 +12,10 @@ class DebitDetails extends Model
     protected $fillable = [
         'debit_no', 'name_of_product', 'service_code', 'qty', 'total_amount'
     ];
+
+    public function debitPrimary()
+    {
+        return $this->belongsTo(DebitPrimary::class,'debit_no');
+    }
 
 }

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Banks extends Model
+class Bank extends Model
 {
 
     protected $table = 'banks';
@@ -12,5 +12,10 @@ class Banks extends Model
     protected $fillable = [
       'company_id', 'account_no', 'beneficiary_name', 'branch_ifsc'
     ];
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class,'company_id');
+    }
 
 }

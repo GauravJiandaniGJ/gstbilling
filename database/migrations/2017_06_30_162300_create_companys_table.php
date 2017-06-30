@@ -15,11 +15,17 @@ class CreateCompanysTable extends Migration
 
             $table->string('name');
 
+            $table->string('short_name');
+
             $table->text('address');
 
             $table->string('gstin');
 
             $table->string('state');
+
+            $table->string('username');
+
+            $table->string('password');
 
             $table->timestamps();
 

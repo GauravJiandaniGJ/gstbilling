@@ -113,5 +113,29 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 
     Route::get('/debitList', ['uses' => 'DebitController@debitList']);
 
+});
+
+
+Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{financial_month}/bill/'],function() {
+
+    Route::post('/createNew', ['uses' => 'BillController@createNew']);
+
+    Route::patch('/updatePrimary', ['uses' => 'BillController@updatePrimary']);
+
+    Route::post('/addBillDetails/{bill_no}', ['uses' => 'BillController@addBillDetails']);
+
+    Route::patch('/editBillDetails/{bill_no}/{bill_detail_no}', ['uses' => 'BillController@editBillDetails']);
+
+    Route::delete('/deleteBillDetail/{bill_no}/{debit_detail_no}', ['uses' => 'BillController@deleteBillDetail']);
+
+    Route::post('/calculateTotalAmount/{bill_no}', ['uses' => 'BillController@calculateTotalAmount']);
+
+    Route::post('/confirmBill/{bill_no}', ['uses' => 'BillController@confirmBill']);
+
+    Route::get('/displayAllData/{bill_no}', ['uses' => 'BillController@displayAllData']);
+
+    Route::get('/bill_no/{bill_no}', ['uses' => 'BillController@bill_no']);
+
+    Route::get('/billList', ['uses' => 'BillController@billList']);
 
 });

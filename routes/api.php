@@ -2,18 +2,11 @@
 
     use Illuminate\Http\Request;
 
-    /*
-    |--------------------------------------------------------------------------
-    | API Routes
-    |--------------------------------------------------------------------------
-    |
-    | Here is where you can register API routes for your application. These
-    | routes are loaded by the RouteServiceProvider within a group which
-    | is assigned the "api" middleware group. Enjoy building your API!
-    |
-    */
+    Route::post('/login', ['uses' => 'AuthController@authenticate']);
 
-    Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::get('/', ['uses' => 'AuthController@checkAuthentication'])->middleware('jwt');
+
+Route::middleware('auth:api')->get('/user', function (Request $request) {
         return $request->user();
     });
 
@@ -139,3 +132,7 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
     Route::get('/billList', ['uses' => 'BillController@billList']);
 
 });
+
+
+Route::get('/stateList', ['uses' => 'ShortcutController@stateList']);
+

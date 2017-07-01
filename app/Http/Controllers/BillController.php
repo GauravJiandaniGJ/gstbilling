@@ -12,8 +12,6 @@ use Illuminate\Http\Request;
 class BillController extends Controller
 {
 
-
-
     public function billList($company_id, $financial_year, $financial_month)
     {
 

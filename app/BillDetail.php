@@ -10,7 +10,7 @@ class BillDetail extends Model
     protected $table = 'bill_details';
 
     protected $fillable = [
-      'bill_no', 'name_of_product', 'service_code', 'qty', 'total_amount'
+      'bill_no', 'name_of_product', 'service_code', 'qty', 'rate', 'total_amount'
     ];
 
     public function billPrimary()

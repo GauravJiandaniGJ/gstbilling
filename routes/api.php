@@ -54,7 +54,7 @@ Route::group(['prefix'=>'company'],function() {
 });
 
 
-Route::group(['prefix' => 'company/{user_id}/year'], function (){
+Route::group(['prefix' => 'company/{company_id}/year'], function (){
 
     Route::post('/createFinancialYear', ['uses' => 'FinancialYearController@createFinancialYear']);
 
@@ -88,5 +88,28 @@ Route::group(['prefix'=>'user'],function() {
     Route::get('/show/{user_id}', ['uses' => 'UsersController@show']);
 
     Route::delete('/destroy/{user_id}', ['uses' => 'UsersController@destroy']);
+
+});
+
+Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{financial_month}'],function() {
+
+    Route::post('/createNew', ['uses' => 'DebitController@createNew']);
+
+    Route::patch('/updatePrimary', ['uses' => 'DebitController@updatePrimary']);
+
+    Route::post('/addDebitDetails/{debit_no}', ['uses' => 'DebitController@addDebitDetails']);
+
+    Route::patch('/editDebitDetails/{debit_no}/{debit_detail_no}', ['uses' => 'DebitController@editDebitDetails']);
+
+    Route::delete('/deleteDebitDetail/{debit_no}/{debit_detail_no}', ['uses' => 'DebitController@deleteDebitDetail']);
+
+    Route::post('/calculateTotalAmount/{debit_no}', ['uses' => 'DebitController@calculateTotalAmount']);
+
+    Route::post('/confirmBill/{debit_no}', ['uses' => 'DebitController@confirmBill']);
+
+    Route::get('/displayAllData/{debit_no}', ['uses' => 'DebitController@displayAllData']);
+
+    Route::get('/debit_no/{debit_no}', ['uses' => 'DebitController@debit_no']);
+
 
 });

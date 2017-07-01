@@ -34,7 +34,7 @@ class DebitController extends Controller
 
         $input_client = $request->only('client_id', 'gstin');
 
-        $client_address = ClientAddress::where('client_id',$input_client['client_id'])->where('gstin',$input_client['gstin']);
+        $client_address = ClientAddress::where('client_id',$input_client['client_id'])->where('gstin',$input_client['gstin'])->first();
 
         if(!$client_address)
         {
@@ -49,9 +49,9 @@ class DebitController extends Controller
 
         $input['company_id'] = $company_id;
 
-        $input['financial_year'] = $financial_year;
+        $input['financial_year_id'] = $financial_year;
 
-        $input['financial_month'] = $financial_month;
+        $input['financial_month_id'] = $financial_month;
 
         $input['status'] = 'edit';
 
@@ -79,7 +79,7 @@ class DebitController extends Controller
 
         $input_client = $request->only('client_id', 'gstin');
 
-        $client_address = ClientAddress::where('client_id',$input_client['client_id'])->where('gstin',$input_client['gstin']);
+        $client_address = ClientAddress::where('client_id',$input_client['client_id'])->where('gstin',$input_client['gstin'])->first();
 
         if(!$client_address)
         {
@@ -111,10 +111,10 @@ class DebitController extends Controller
 
     }
 
-    public function addDebitDetails(Request $request, $debit_no)
+    public function addDebitDetails(Request $request, $company_id, $financial_year, $financial_month,  $debit_no)
     {
 
-        $input = $request->only('name_of_product', 'service_code', 'qty', 'total_amount');
+        $input = $request->only('name_of_product', 'service_code', 'qty', 'rate', 'total_amount');
 
         $input['debit_no'] = $debit_no;
 
@@ -131,10 +131,10 @@ class DebitController extends Controller
 
     }
 
-    public function editDebitDetails(Request $request, $debit_no, $debit_detail_no)
+    public function editDebitDetails(Request $request, $company_id, $financial_year, $financial_month, $debit_no, $debit_detail_no)
     {
 
-        $input = $request->only('name_of_product', 'service_code', 'qty', 'total_amount');
+        $input = $request->only('name_of_product', 'service_code', 'qty', 'rate', 'total_amount');
 
         $input = array_filter($input, function($value){
 
@@ -157,7 +157,7 @@ class DebitController extends Controller
 
     }
 
-    public function deleteDebitDetail($debit_no, $debit_detail_no)
+    public function deleteDebitDetail($company_id, $financial_year, $financial_month, $debit_no, $debit_detail_no)
     {
 
         $debit_detail = DebitDetail::where('debit_no',$debit_no)->where('id',$debit_detail_no)->first();
@@ -175,7 +175,7 @@ class DebitController extends Controller
 
     }
 
-    public function calculateTotalAmount($debit_no)
+    public function calculateTotalAmount($company_id, $financial_year, $financial_month, $debit_no)
     {
 
         $debit_detail_amount = DebitDetail::where('debit_no',$debit_no)->pluck('total_amount');
@@ -204,7 +204,7 @@ class DebitController extends Controller
 
     }
 
-    public function confirmBill($debit_no)
+    public function confirmBill($company_id, $financial_year, $financial_month, $debit_no)
     {
 
         $debit_primary = DebitPrimary::where('debit_no',$debit_no)->first();
@@ -236,7 +236,7 @@ class DebitController extends Controller
 
     }
 
-    public function displayAllData($debit_no)
+    public function displayAllData($company_id, $financial_year, $financial_month, $debit_no)
     {
 
         $debit_bill = DebitPrimary::with(['company', 'company.bank', 'client_address', 'client_address.client', 'debitDetails'])->where('debit_no',$debit_no)->first();
@@ -252,10 +252,10 @@ class DebitController extends Controller
 
     }
 
-    public function debit_no($debit_no)
+    public function debit_no($company_id, $financial_year, $financial_month, $debit_no)
     {
 
-        $debit_detail = DebitPrimary::with(['company'])->where('debit_no')->first();
+        $debit_detail = DebitPrimary::with(['company'])->where('debit_no',$debit_no)->first();
 
         if(!$debit_detail)
         {
@@ -270,7 +270,7 @@ class DebitController extends Controller
 
         $new_year = substr($year, -2);
 
-        $next_year = settype($new_year, "integer") + 1;
+        $next_year = (int)$new_year + 1;
 
         return response(array("format" => "$company_short_name/GST/$debit_no/$new_year-$next_year"),200);
 

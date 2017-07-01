@@ -12,7 +12,7 @@ class DebitPrimary extends Model
     protected $primaryKey = 'debit_no';
 
     protected $fillable = [
-        'debit_no', 'debit_date', 'company_id', 'client_address_id', 'description', 'final_amount', 'financial_year_id', 'financial_month_id'
+        'debit_no', 'debit_date', 'company_id', 'client_address_id', 'description', 'final_amount', 'financial_year_id', 'financial_month_id', 'status'
     ];
 
     public function company()

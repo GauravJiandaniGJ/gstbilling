@@ -22,7 +22,9 @@ class CreateDebitDetails extends Migration
 
             $table->integer('qty');
 
-            $table->integer('total_amount');
+            $table->double('rate');
+
+            $table->double('total_amount');
 
             $table->timestamps();
 

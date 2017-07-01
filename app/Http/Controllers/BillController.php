@@ -216,7 +216,7 @@ class BillController extends Controller
 
         }
 
-        $company = Company::where('id',$company_id)->pluck('state');
+        $company = Company::where('id',$company_id)->first();
 
         $bill = BillPrimary::with(['client_address'])->where('bill_no',$bill_no)->first();
 
@@ -229,7 +229,7 @@ class BillController extends Controller
 
         $client_state = $bill['client_address']['state'];
 
-        if($client_state == $company['state'])
+        if(strcasecmp($client_state , $company['state']) == 0)
         {
 
             $after_cgst_percent = 9;
@@ -336,7 +336,7 @@ class BillController extends Controller
 
         $next_year = (int)$new_year + 1;
 
-        return response(array("format" => "$company_short_name/GST/$bill_detail/$new_year-$next_year"),200);
+        return response(array("format" => "$company_short_name/GST/$bill_no/$new_year-$next_year"),200);
 
     }
 

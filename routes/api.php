@@ -116,7 +116,7 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 });
 
 
-Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{financial_month}/bill/'],function() {
+Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{financial_month}/bill'],function() {
 
     Route::post('/createNew', ['uses' => 'BillController@createNew']);
 

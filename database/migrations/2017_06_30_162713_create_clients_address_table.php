@@ -10,18 +10,20 @@ class CreateClientsAddressTable extends Migration
     public function up()
     {
         Schema::create('clients_address', function (Blueprint $table) {
+
             $table->increments('id');
 
             $table->integer('client_id')->unsigned();
-            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');;
-
-            $table->text('address');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
 
             $table->string('gstin')->unique();
+
+            $table->text('address');
 
             $table->string('state');
 
             $table->timestamps();
+
         });
     }
 

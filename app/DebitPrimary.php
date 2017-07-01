@@ -12,7 +12,7 @@ class DebitPrimary extends Model
     protected $primaryKey = 'debit_no';
 
     protected $fillable = [
-        'debit_date', 'company_id', 'client_id', 'description', 'final_amount', 'financial_year_id', 'financial_month_id'
+        'debit_no', 'debit_date', 'company_id', 'client_address_id', 'description', 'final_amount', 'financial_year_id', 'financial_month_id'
     ];
 
     public function company()
@@ -20,9 +20,9 @@ class DebitPrimary extends Model
         return $this->belongsTo(Company::class,'company_id');
     }
 
-    public function client()
+    public function client_address()
     {
-        return $this->belongsTo(Client::class,'client_id');
+        return $this->belongsTo(ClientAddress::class,'client_address_id');
     }
 
     public function debitDetails()

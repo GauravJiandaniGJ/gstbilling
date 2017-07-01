@@ -9,6 +9,6 @@ class Shortcut extends Model
     protected $table = 'shortcuts';
 
     protected $fillable = [
-      'description', 'price'
+      'description', 'price', 'type'
     ];
 }

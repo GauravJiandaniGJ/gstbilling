@@ -23,6 +23,8 @@ class ShortcutController extends Controller
 
         }
 
+        return $shortcut;
+
     }
 
     public function index()
@@ -32,7 +34,9 @@ class ShortcutController extends Controller
 
         if(!$shortcuts)
         {
+
             return Helper::apiError("Can't fetch shortcuts!",null,404);
+
         }
 
         return $shortcuts;

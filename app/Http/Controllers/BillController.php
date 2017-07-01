@@ -89,9 +89,9 @@ class BillController extends Controller
     public function updatePrimary(Request $request, $company_id, $financial_year, $financial_month)
     {
 
-        $input_debit = $request->only('bill_no');
+        $input_bill = $request->only('bill_no');
 
-        $bill_no = $input_debit['bill_no'];
+        $bill_no = $input_bill['bill_no'];
 
         $input = $request->only('bill_date', 'description');
 
@@ -178,7 +178,7 @@ class BillController extends Controller
     public function deleteBillDetail($company_id, $financial_year, $financial_month, $bill_no, $bill_detail_no)
     {
 
-        $bill_detail = BillDetail::where('debit_no',$bill_no)->where('id',$bill_detail_no)->first();
+        $bill_detail = BillDetail::where('bill_no',$bill_no)->where('id',$bill_detail_no)->first();
 
         if(!$bill_detail)
         {
@@ -303,7 +303,7 @@ class BillController extends Controller
     public function displayAllData($company_id, $financial_year, $financial_month, $bill_no)
     {
 
-        $bill = BillPrimary::with(['company', 'company.bank', 'client_address', 'client_address.client', 'debitDetails'])->where('bill_no',$bill_no)->first();
+        $bill = BillPrimary::with(['company', 'company.bank', 'client_address', 'client_address.client', 'billDetails'])->where('bill_no',$bill_no)->first();
 
         if(!$bill)
         {

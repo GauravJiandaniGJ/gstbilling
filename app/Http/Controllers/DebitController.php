@@ -272,7 +272,7 @@ class DebitController extends Controller
 
         $next_year = (int)$new_year + 1;
 
-        return response(array("format" => "$company_short_name/GST/$debit_no/$new_year-$next_year"),200);
+        return response(array("format" => "$company_short_name/$debit_no/$new_year-$next_year"),200);
 
     }
 

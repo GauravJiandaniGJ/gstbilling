@@ -14,12 +14,19 @@ class DebitController extends Controller
     public function debitList($company_id, $financial_year, $financial_month)
     {
 
-        $list = DebitPrimary::where('company_id',$company_id)->where('financial_year',$financial_year)->where('financial_month',$financial_month)->where('status','final')->get();
+        $list = DebitPrimary::with(['company'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','final')->get();
 
         if(!$list)
         {
 
             return Helper::apiError("No List found!",null, 404);
+
+        }
+
+        if(sizeof($list)==0)
+        {
+
+            return response("No Debit Bill",200);
 
         }
 

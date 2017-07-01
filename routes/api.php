@@ -111,5 +111,7 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 
     Route::get('/debit_no/{debit_no}', ['uses' => 'DebitController@debit_no']);
 
+    Route::get('/debitList', ['uses' => 'DebitController@debitList']);
+
 
 });

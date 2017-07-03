@@ -31,6 +31,8 @@ class ClientsController extends Controller
 
         $input = $request->only('name');
 
+        $input_for_address = $request->onlt('address','gstin','state');
+
         $client = Client::create($input);
 
         if(!$client)
@@ -40,7 +42,18 @@ class ClientsController extends Controller
 
         }
 
-        return $client;
+        $input_for_address['client_id'] = $client['id'];
+
+        $client_address = ClientAddress::create($input_for_address);
+
+        if(!$client_address)
+        {
+
+            return Helper::apiError("Can't create Client Address!",null,404);
+
+        }
+
+        return response(array('client'=>$client,'client_address',$client_address),200);
 
     }
 

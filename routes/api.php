@@ -30,6 +30,19 @@ Route::group(['prefix' => 'client'], function (){
 });
 
 
+Route::group(['prefix'=>'statement'],function() {
+
+    Route::post('/generateStatementPartywiseDebit', ['uses' => 'StatementController@generateStatementPartywiseDebit']);
+
+    Route::post('/generateStatementPartywiseBill', ['uses' => 'StatementController@generateStatementPartywiseBill']);
+
+    Route::get('/listOfStatement', ['uses' => 'StatementController@listOfStatement']);
+
+    Route::post('/generateStatement', ['uses' => 'StatementController@generateStatement']);
+
+});
+
+
 Route::group(['prefix'=>'company'],function() {
 
     Route::post('/createCompany', ['uses' => 'CompanyController@create']);
@@ -46,6 +59,8 @@ Route::group(['prefix'=>'company'],function() {
 
 });
 
+// company/dashboard
+
 
 Route::group(['prefix' => 'company/{company_id}/year'], function (){
 
@@ -57,7 +72,7 @@ Route::group(['prefix' => 'company/{company_id}/year'], function (){
 
 });
 
-
+//company/{company_id}/year/dashboard
 
 Route::group(['prefix'=>'year/{financial_year_id}'],function() {
 

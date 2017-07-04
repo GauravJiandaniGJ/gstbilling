@@ -9,6 +9,18 @@ use Illuminate\Http\Request;
 class ShortcutController extends Controller
 {
 
+    public function index()
+    {
+        $shortcuts = Shortcut::all();
+
+        if(!$shortcuts)
+        {
+            return Helper::apiError("Not found!",null,404);
+        }
+
+        return $shortcuts;
+    }
+
     public function create(Request $request)
     {
 
@@ -27,33 +39,41 @@ class ShortcutController extends Controller
 
     }
 
-    public function update()
+    public function update(Request $request, $sid)
     {
 
+        $input = $request->only('description', 'price', 'service_code');
 
+        $shortcut = Shortcut::where('id',$sid)->first();
 
-    }
-
-    public function delete()
-    {
-
-
-
-    }
-
-    public function index()
-    {
-
-        $shortcuts = Shortcut::all();
-
-        if(!$shortcuts)
+        if(!$shortcut)
         {
 
-            return Helper::apiError("Can't fetch shortcuts!",null,404);
+            return Helper::apiError("Can't find Shortcut!",null,404);
 
         }
 
-        return $shortcuts;
+        $shortcut->update($input);
+
+        return $shortcut;
+
+    }
+
+    public function delete($sid)
+    {
+
+        $shortcut = Shortcut::where('id',$sid)->first();
+
+        if(!$shortcut)
+        {
+
+            return Helper::apiError("Can't find Shortcut!",null,404);
+
+        }
+
+        $shortcut->delete();
+
+        return response("",204);
 
     }
 

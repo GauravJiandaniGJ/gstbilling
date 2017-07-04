@@ -15,7 +15,7 @@ class BillController extends Controller
     public function billList($company_id, $financial_year, $financial_month)
     {
 
-        $list = BillPrimary::with(['company'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','final')->get();
+        $list = BillPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','=','final')->get();
 
         if(!$list)
         {
@@ -32,6 +32,47 @@ class BillController extends Controller
         }
 
         return $list;
+
+    }
+
+    public function billListPending($company_id, $financial_year, $financial_month)
+    {
+
+        $list = BillPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','!=','final')->get();
+
+        if(!$list)
+        {
+
+            return Helper::apiError("No List found!",null, 404);
+
+        }
+
+        if(sizeof($list)==0)
+        {
+
+            return response("No Bill",200);
+
+        }
+
+        return $list;
+
+    }
+
+    public function latestBillNo($company_id, $financial_year, $financial_month)
+    {
+
+        $list = BillPrimary::all();
+
+        if(!$list)
+        {
+
+            return Helper::apiError("Not found",404);
+
+        }
+
+        $size = sizeof($list) - 1;
+
+        return $list[$size]['bill_no'] + 1;
 
     }
 

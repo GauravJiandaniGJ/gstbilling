@@ -26,12 +26,32 @@ class ClientsController extends Controller
 
     }
 
+    public function updateName(Request $request, $client_id)
+    {
+
+        $input = $request->only('name');
+
+        $client = Client::where('id',$client_id)->first();
+
+        if(!$client)
+        {
+
+            return Helper::apiError("Client not found!",null,404);
+
+        }
+
+        $client->update($input);
+
+        return $client;
+
+    }
+
     public function create(Request $request, $company_id)
     {
 
         $input = $request->only('name');
 
-        $input_for_address = $request->onlt('address','gstin','state');
+        $input_for_address = $request->only('address','gstin','state');
 
         $input['company_id'] = $company_id;
 

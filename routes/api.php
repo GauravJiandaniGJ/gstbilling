@@ -17,6 +17,8 @@ Route::group(['prefix' => 'client'], function (){
 
     Route::post('/createAddress/{client_id}', ['uses' => 'ClientsController@createAddress']);
 
+    Route::patch('/updateName/{client_id}', ['uses' => 'ClientsController@updateName']);
+
     Route::get('/clientList/{company_id}', ['uses' => 'ClientsController@index']);
 
     Route::get('/show/{client_id}', ['uses' => 'ClientsController@show']);
@@ -56,6 +58,12 @@ Route::group(['prefix'=>'company'],function() {
     Route::delete('/destroy/{company_id}', ['uses' => 'CompanyController@destroy']);
 
     Route::post('/authenticate/{company_id}', ['uses' => 'CompanyController@authenticate']);
+
+    Route::post('/addBank/{company_id}', ['uses' => 'CompanyController@addBank']);
+
+    Route::get('/listOfBanks/{company_id}', ['uses' => 'CompanyController@listOfBanks']);
+
+    Route::delete('/bank/destroy/{bank_id}', ['uses' => 'CompanyController@deleteBank']);
 
 });
 
@@ -150,14 +158,20 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 
     Route::get('/billList', ['uses' => 'BillController@billList']);
 
+    Route::get('/billListPending', ['uses' => 'BillController@billListPending']);
+
+    Route::get('/latestBillNo', ['uses' => 'BillController@latestBillNo']);
+
 });
 
 
-Route::get('/shortcut/stateList', ['uses' => 'ShortcutController@stateList']);
+Route::get('/stateList', ['uses' => 'ShortcutController@stateList']);
+
+Route::get('/shortcut/index', ['uses' => 'ShortcutController@index']);
 
 Route::post('/shortcut/create', ['uses' => 'ShortcutController@create']);
 
-Route::delete('/shortcut/delete', ['uses' => 'ShortcutController@delete']);
+Route::delete('/shortcut/delete/{sid}', ['uses' => 'ShortcutController@delete']);
 
-Route::patch('/shortcut/update', ['uses' => 'ShortcutController@update']);
+Route::patch('/shortcut/update/{sid}', ['uses' => 'ShortcutController@update']);
 

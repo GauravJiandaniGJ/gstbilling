@@ -14,7 +14,49 @@ class DebitController extends Controller
     public function debitList($company_id, $financial_year, $financial_month)
     {
 
-        $list = DebitPrimary::with(['company'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','final')->get();
+        $list = DebitPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','final')->get();
+
+        if(!$list)
+        {
+
+            return Helper::apiError("No List found!",null, 404);
+
+        }
+
+        if(sizeof($list)==0)
+        {
+
+            return response("No Debit Bill",200);
+
+        }
+
+        return $list;
+
+    }
+
+    public function latestDebitNo($company_id, $financial_year, $financial_month)
+    {
+
+        $list = DebitPrimary::all();
+
+        if(!$list)
+        {
+
+            return Helper::apiError("Not found",404);
+
+        }
+
+        $size = sizeof($list) - 1;
+
+        return $list[$size]['debit_no'] + 1;
+
+
+    }
+
+        public function debitListPending($company_id, $financial_year, $financial_month)
+    {
+
+        $list = DebitPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','!=','final')->get();
 
         if(!$list)
         {

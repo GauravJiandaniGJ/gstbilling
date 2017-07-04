@@ -16,7 +16,7 @@ class CreateShortcutsTable extends Migration
 
             $table->double('price');
 
-            $table->string('type');
+            $table->string('service_code');
 
             $table->timestamps();
         });

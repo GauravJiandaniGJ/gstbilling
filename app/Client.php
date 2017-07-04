@@ -10,7 +10,7 @@ class Client extends Model
     protected $table = "clients";
 
     protected $fillable = [
-        'name'
+        'name', 'company_id'
     ];
 
     public function bill()
@@ -26,5 +26,10 @@ class Client extends Model
     public function address()
     {
         return $this->hasMany(ClientAddress::class,'client_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class,'company_id');
     }
 }

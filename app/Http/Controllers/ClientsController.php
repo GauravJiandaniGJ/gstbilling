@@ -10,10 +10,10 @@ use Illuminate\Http\Request;
 class ClientsController extends Controller
 {
 
-    public function index()
+    public function index($company_id)
     {
 
-        $clients = Client::all();
+        $clients = Client::where('company_id',$company_id)->get();
 
         if(!$clients)
         {
@@ -26,12 +26,14 @@ class ClientsController extends Controller
 
     }
 
-    public function create(Request $request)
+    public function create(Request $request, $company_id)
     {
 
         $input = $request->only('name');
 
         $input_for_address = $request->onlt('address','gstin','state');
+
+        $input['company_id'] = $company_id;
 
         $client = Client::create($input);
 

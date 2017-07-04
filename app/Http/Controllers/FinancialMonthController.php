@@ -45,9 +45,4 @@ class FinancialMonthController extends Controller
 
     }
 
-    public function statementMonthWise($financial_year_id, $financial_month_id)
-    {
-
-    }
-
 }

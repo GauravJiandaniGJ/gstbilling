@@ -12,7 +12,7 @@ class ShortcutController extends Controller
     public function create(Request $request)
     {
 
-        $input = $request->only('description', 'price', 'type');
+        $input = $request->only('description', 'price', 'service_code');
 
         $shortcut = Shortcut::create($input);
 
@@ -24,6 +24,20 @@ class ShortcutController extends Controller
         }
 
         return $shortcut;
+
+    }
+
+    public function update()
+    {
+
+
+
+    }
+
+    public function delete()
+    {
+
+
 
     }
 

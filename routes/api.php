@@ -13,11 +13,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'client'], function (){
 
-    Route::post('/createClient', ['uses' => 'ClientsController@create']);
+    Route::post('/createClient/{company_id}', ['uses' => 'ClientsController@create']);
 
     Route::post('/createAddress/{client_id}', ['uses' => 'ClientsController@createAddress']);
 
-    Route::get('/clientList', ['uses' => 'ClientsController@index']);
+    Route::get('/clientList/{company_id}', ['uses' => 'ClientsController@index']);
 
     Route::get('/show/{client_id}', ['uses' => 'ClientsController@show']);
 
@@ -72,7 +72,7 @@ Route::group(['prefix' => 'company/{company_id}/year'], function (){
 
 });
 
-//company/{company_id}/year/dashboard
+//company/{company_id}
 
 Route::group(['prefix'=>'year/{financial_year_id}'],function() {
 
@@ -121,6 +121,10 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 
     Route::get('/debitList', ['uses' => 'DebitController@debitList']);
 
+    Route::get('/debitListPending', ['uses' => 'DebitController@debitListPending']);
+
+    Route::get('/latestDebitNo', ['uses' => 'DebitController@latestDebitNo']);
+
 });
 
 
@@ -149,5 +153,11 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 });
 
 
-Route::get('/stateList', ['uses' => 'ShortcutController@stateList']);
+Route::get('/shortcut/stateList', ['uses' => 'ShortcutController@stateList']);
+
+Route::post('/shortcut/create', ['uses' => 'ShortcutController@create']);
+
+Route::delete('/shortcut/delete', ['uses' => 'ShortcutController@delete']);
+
+Route::patch('/shortcut/update', ['uses' => 'ShortcutController@update']);
 

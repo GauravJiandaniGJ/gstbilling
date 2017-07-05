@@ -206,11 +206,11 @@ class DebitController extends Controller
 
     }
 
-    public function deleteDebitDetail($company_id, $financial_year, $financial_month, $debit_no, $debit_detail_no)
+    public function deleteDebitDetail($company_id, $financial_year, $financial_month, $debit_no)
     {
 
-        $debit_detail = DebitDetail::where('debit_no',$debit_no)->where('id',$debit_detail_no)->first();
-
+        $debit_detail = DebitPrimary::where('debit_no',$debit_no)->first();
+        
         if(!$debit_detail)
         {
 

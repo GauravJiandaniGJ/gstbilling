@@ -214,10 +214,19 @@ class BillController extends Controller
 
     }
 
-    public function deleteBillDetail($company_id, $financial_year, $financial_month, $bill_no, $bill_detail_no)
+    public function deleteBillDetail($company_id, $financial_year, $financial_month, $bill_no)
     {
 
-        $bill_detail = BillDetail::where('bill_no',$bill_no)->where('id',$bill_detail_no)->first();
+        $bill_detail = BillPrimary::where('bill_no',$bill_no)->first();
+
+        $bill_details = BillDetail::where('bill_no',$bill_no)->get();
+
+        foreach ($bill_details as $bill)
+        {
+
+            $bill->delete();
+
+        }
 
         if(!$bill_detail)
         {

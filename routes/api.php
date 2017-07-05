@@ -117,7 +117,7 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 
     Route::patch('/editDebitDetails/{debit_no}/{debit_detail_no}', ['uses' => 'DebitController@editDebitDetails']);
 
-    Route::delete('/deleteDebitDetail/{debit_no}/{debit_detail_no}', ['uses' => 'DebitController@deleteDebitDetail']);
+    Route::delete('/deleteDebitDetail/{debit_no}', ['uses' => 'DebitController@deleteDebitDetail']);
 
     Route::post('/calculateTotalAmount/{debit_no}', ['uses' => 'DebitController@calculateTotalAmount']);
 
@@ -146,7 +146,7 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 
     Route::patch('/editBillDetails/{bill_no}/{bill_detail_no}', ['uses' => 'BillController@editBillDetails']);
 
-    Route::delete('/deleteBillDetail/{bill_no}/{debit_detail_no}', ['uses' => 'BillController@deleteBillDetail']);
+    Route::delete('/deleteBillDetail/{bill_no}', ['uses' => 'BillController@deleteBillDetail']);
 
     Route::post('/calculateTotalAmount/{bill_no}', ['uses' => 'BillController@calculateTotalAmount']);
 

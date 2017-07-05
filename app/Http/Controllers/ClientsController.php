@@ -163,10 +163,20 @@ class ClientsController extends Controller
 
         $client = Client::where('id',$client_id)->first();
 
+        $client_address = ClientAddress::where('client_id',$client_id)->get();
+
         if(!$client)
         {
 
             return Helper::apiError("Client not found!",null,404);
+
+        }
+
+
+        foreach ($client_address as $address)
+        {
+
+            $address->delete();
 
         }
 

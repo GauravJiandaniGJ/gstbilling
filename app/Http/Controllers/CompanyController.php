@@ -82,7 +82,7 @@ class CompanyController extends Controller
     public function show($company_id)
     {
 
-        $company = Company::with(['bank','client'])->where('id',$company_id)->first();
+        $company = Company::with(['bank','client','client.address'])->where('id',$company_id)->first();
 
         if(!$company)
         {

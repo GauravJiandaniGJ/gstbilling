@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bank;
 use App\BillDetail;
 use App\BillPrimary;
 use App\ClientAddress;
@@ -89,6 +90,21 @@ class BillController extends Controller
         {
 
             return Helper::apiError("Client Address not found!",null,404);
+
+        }
+
+        $bank = Bank::where('company_id',$company_id)->first();
+
+        if(sizeof($bank) == 0)
+        {
+
+            $input['bank_id'] = 0;
+
+        }
+        else
+        {
+
+            $input['bank_id'] = $bank['id'];
 
         }
 
@@ -351,7 +367,7 @@ class BillController extends Controller
     public function displayAllData($company_id, $financial_year, $financial_month, $bill_no)
     {
 
-        $bill = BillPrimary::with(['company', 'company.bank', 'client_address', 'client_address.client', 'billDetails'])->where('bill_no',$bill_no)->first();
+        $bill = BillPrimary::with(['company', 'bank','company', 'client_address', 'client_address.client', 'billDetails'])->where('bill_no',$bill_no)->first();
 
         if(!$bill)
         {

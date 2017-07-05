@@ -12,12 +12,17 @@ class BillPrimary extends Model
     protected $primaryKey = 'bill_no';
 
     protected $fillable = [
-        'bill_no', 'bill_date', 'company_id', 'client_address_id', 'description', 'after_cgst', 'after_sgst', 'after_igst', 'total_gst', 'final_amount', 'financial_year_id', 'financial_month_id', 'status'
+        'bill_no', 'bill_date', 'company_id', 'client_address_id', 'bank_id', 'description', 'after_cgst', 'after_sgst', 'after_igst', 'total_gst', 'final_amount', 'financial_year_id', 'financial_month_id', 'status'
     ];
 
     public function company()
     {
         return $this->belongsTo(Company::class,'company_id');
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class,'bank_id');
     }
 
     public function client_address()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bank;
 use App\ClientAddress;
 use App\DebitDetail;
 use App\DebitPrimary;
@@ -128,6 +129,21 @@ class DebitController extends Controller
 
         $input_client = $request->only('client_id', 'gstin');
 
+        $bank = Bank::where('company_id',$company_id)->first();
+
+        if(sizeof($bank) == 0)
+        {
+
+            $input['bank_id'] = 0;
+
+        }
+        else
+        {
+
+            $input['bank_id'] = $bank['id'];
+
+        }
+
         $client_address = ClientAddress::where('client_id',$input_client['client_id'])->where('gstin',$input_client['gstin'])->first();
 
         if(!$client_address)
@@ -210,7 +226,7 @@ class DebitController extends Controller
     {
 
         $debit_detail = DebitPrimary::where('debit_no',$debit_no)->first();
-        
+
         if(!$debit_detail)
         {
 
@@ -288,7 +304,7 @@ class DebitController extends Controller
     public function displayAllData($company_id, $financial_year, $financial_month, $debit_no)
     {
 
-        $debit_bill = DebitPrimary::with(['company', 'company.bank', 'client_address', 'client_address.client', 'debitDetails'])->where('debit_no',$debit_no)->first();
+        $debit_bill = DebitPrimary::with(['company', 'bank', 'company', 'client_address', 'client_address.client', 'debitDetails'])->where('debit_no',$debit_no)->first();
 
         if(!$debit_bill)
         {

@@ -19,6 +19,9 @@ class CreateDebitPrimaryDetails extends Migration
             $table->integer('company_id')->unsigned();
             $table->foreign('company_id')->references('id')->on('companys');
 
+            $table->integer('bank_id')->unsigned();
+            $table->foreign('bank_id')->references('id')->on('banks');
+
             $table->integer('client_address_id')->unsigned();
             $table->foreign('client_address_id')->references('id')->on('clients_address');
 

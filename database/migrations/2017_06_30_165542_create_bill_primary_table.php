@@ -21,6 +21,9 @@ class CreateBillPrimaryTable extends Migration
             $table->integer('client_address_id')->unsigned();
             $table->foreign('client_address_id')->references('id')->on('clients_address');
 
+            $table->integer('bank_id')->unsigned();
+            $table->foreign('bank_id')->references('id')->on('banks');
+
             $table->longText('description');
 
             $table->double('after_cgst');

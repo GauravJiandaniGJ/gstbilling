@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\BillDetail;
 use App\BillPrimary;
+use App\DebitDetail;
 use App\DebitPrimary;
+use App\Helper;
 use Illuminate\Http\Request;
 
 class StatementController extends Controller
@@ -394,6 +397,47 @@ class StatementController extends Controller
         $total_gst = array_sum($gst);
 
         return response(array('bill'=>$bill_arr,'bill_total_amt'=>$total,'total_cgst'=>$total_cgst,'total_igst'=>$total_igst,'total_sgst'=>$total_sgst,'total_gst'=>$total_gst),200);
+
+    }
+
+    public function finalDataDebit($bill_no)
+    {
+
+        $debit_bill = DebitPrimary::with(['company', 'bank', 'company', 'company', 'client_address', 'client_address.client'])->where('debit_no',$bill_no)->first();
+
+        if(!$debit_bill)
+        {
+
+            return Helper::apiError("Can't fetch data");
+
+        }
+
+        $bill_detail = DebitDetail::where('debit_no',$bill_no)->where('total_amount','!=',null)->get();
+
+        $debit_bill['bill_detail'] = $bill_detail;
+
+        return $debit_bill;
+
+    }
+
+
+    public function finalDataBill($bill_no)
+    {
+
+        $bill = BillPrimary::with(['company', 'bank', 'company', 'company', 'client_address', 'client_address.client'])->where('bill_no',$bill_no)->first();
+
+        if(!$bill)
+        {
+
+            return Helper::apiError("Can't fetch data");
+
+        }
+
+        $bill_detail = BillDetail::where('bill_no',$bill_no)->where('total_amount','!=',null)->get();
+
+        $bill['bill_detail'] = $bill_detail;
+
+        return $bill;
 
     }
 

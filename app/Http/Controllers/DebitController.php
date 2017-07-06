@@ -84,6 +84,21 @@ class DebitController extends Controller
 
         $input_client = $request->only('client_id', 'gstin');
 
+        $bank = Bank::where('company_id',$company_id)->first();
+
+        if(sizeof($bank) == 0)
+        {
+
+            $input['bank_id'] = 0;
+
+        }
+        else
+        {
+
+            $input['bank_id'] = $bank['id'];
+
+        }
+
         $client_address = ClientAddress::where('client_id',$input_client['client_id'])->where('gstin',$input_client['gstin'])->first();
 
         if(!$client_address)
@@ -118,44 +133,30 @@ class DebitController extends Controller
 
     }
 
-    public function updatePrimary(Request $request, $company_id, $financial_year, $financial_month)
+    public function updatePrimary(Request $request, $bill_no)
     {
 
-        $input_debit = $request->only('debit_no');
-
-        $debit_no = $input_debit['debit_no'];
-
-        $input = $request->only('debit_date', 'description');
+        $input = $request->only('debit_date', 'description', 'bank_id');
 
         $input_client = $request->only('client_id', 'gstin');
 
-        $bank = Bank::where('company_id',$company_id)->first();
-
-        if(sizeof($bank) == 0)
+        if($input_client['client_id']!=null && $input_client['gstin']!=null)
         {
 
-            $input['bank_id'] = 0;
+            $client_address = ClientAddress::where('client_id',$input_client['client_id'])->where('gstin',$input_client['gstin'])->first();
 
-        }
-        else
-        {
+            if(!$client_address)
+            {
 
-            $input['bank_id'] = $bank['id'];
+                return Helper::apiError("Client Address not found!",null,404);
 
-        }
+            }
 
-        $client_address = ClientAddress::where('client_id',$input_client['client_id'])->where('gstin',$input_client['gstin'])->first();
-
-        if(!$client_address)
-        {
-
-            return Helper::apiError("Client Address not found!",null,404);
+            $input['client_address_id'] = $client_address['id'];
 
         }
 
-        $input['client_address_id'] = $client_address['id'];
-
-        $debit_primary = DebitPrimary::where('debit_no',$debit_no)->first();
+        $debit_primary = DebitPrimary::where('debit_no',$bill_no)->first();
 
         if(!$debit_primary)
         {
@@ -304,7 +305,7 @@ class DebitController extends Controller
     public function displayAllData($company_id, $financial_year, $financial_month, $debit_no)
     {
 
-        $debit_bill = DebitPrimary::with(['company', 'bank', 'company', 'client_address', 'client_address.client', 'debitDetails'])->where('debit_no',$debit_no)->first();
+        $debit_bill = DebitPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client', 'debitDetails'])->where('debit_no',$debit_no)->first();
 
         if(!$debit_bill)
         {

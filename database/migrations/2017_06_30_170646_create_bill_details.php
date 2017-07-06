@@ -15,13 +15,15 @@ class CreateBillDetails extends Migration
             $table->integer('bill_no')->unsigned();
             $table->foreign('bill_no')->references('bill_no')->on('bills_primary');
 
-            $table->string('name_of_product');
+            $table->string('name_of_product')->nullable();
 
-            $table->integer('service_code');
+            $table->integer('service_code')->nullable();
 
-            $table->integer('qty');
+            $table->integer('qty')->nullable();
 
-            $table->integer('total_amount');
+            $table->integer('rate')->nullable();
+
+            $table->integer('total_amount')->nullable();
 
             $table->timestamps();
         });

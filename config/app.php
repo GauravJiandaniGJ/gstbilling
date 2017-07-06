@@ -183,6 +183,8 @@ return [
         //cors
         Barryvdh\Cors\ServiceProvider::class,
 
+        //barryvdh pdf
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -232,8 +234,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth'
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
 
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

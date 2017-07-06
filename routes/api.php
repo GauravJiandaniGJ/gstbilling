@@ -107,11 +107,11 @@ Route::group(['prefix'=>'user'],function() {
 
 });
 
+Route::patch('/updatePrimary/{bill_no}', ['uses' => 'DebitController@updatePrimary']);
+
 Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{financial_month}'],function() {
 
     Route::post('/createNew', ['uses' => 'DebitController@createNew']);
-
-    Route::patch('/updatePrimary', ['uses' => 'DebitController@updatePrimary']);
 
     Route::post('/addDebitDetails/{debit_no}', ['uses' => 'DebitController@addDebitDetails']);
 
@@ -135,14 +135,15 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 
 });
 
+Route::patch('/updatePrimary/bill/{bill_no}', ['uses' => 'BillController@updatePrimary']);
+
+Route::post('/addBillDetails/{bill_no}', ['uses' => 'BillController@addBillDetails']);
 
 Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{financial_month}/bill'],function() {
 
     Route::post('/createNew', ['uses' => 'BillController@createNew']);
 
-    Route::patch('/updatePrimary', ['uses' => 'BillController@updatePrimary']);
 
-    Route::post('/addBillDetails/{bill_no}', ['uses' => 'BillController@addBillDetails']);
 
     Route::patch('/editBillDetails/{bill_no}/{bill_detail_no}', ['uses' => 'BillController@editBillDetails']);
 

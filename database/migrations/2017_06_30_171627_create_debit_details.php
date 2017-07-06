@@ -16,15 +16,16 @@ class CreateDebitDetails extends Migration
             $table->integer('debit_no')->unsigned();
             $table->foreign('debit_no')->references('debit_no')->on('debit_primary');
 
-            $table->string('name_of_product');
 
-            $table->integer('service_code');
+            $table->string('name_of_product')->nullable();
 
-            $table->integer('qty');
+            $table->integer('service_code')->nullable();
 
-            $table->double('rate');
+            $table->integer('qty')->nullable();
 
-            $table->double('total_amount');
+            $table->double('rate')->nullable();
+
+            $table->double('total_amount')->nullable();
 
             $table->timestamps();
 

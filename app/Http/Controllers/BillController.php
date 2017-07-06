@@ -141,27 +141,28 @@ class BillController extends Controller
 
     }
 
-    public function updatePrimary(Request $request, $company_id, $financial_year, $financial_month)
+    public function updatePrimary(Request $request, $bill_no)
     {
 
-        $input_bill = $request->only('bill_no');
-
-        $bill_no = $input_bill['bill_no'];
-
-        $input = $request->only('bill_date', 'description');
+        $input = $request->only('bill_date', 'description', 'bank_id');
 
         $input_client = $request->only('client_id', 'gstin');
 
-        $client_address = ClientAddress::where('client_id',$input_client['client_id'])->where('gstin',$input_client['gstin'])->first();
-
-        if(!$client_address)
+        if($input_client['client_id']!=null && $input_client['gstin']!=null)
         {
 
-            return Helper::apiError("Client Address not found!",null,404);
+            $client_address = ClientAddress::where('client_id',$input_client['client_id'])->where('gstin',$input_client['gstin'])->first();
+
+            if(!$client_address)
+            {
+
+                return Helper::apiError("Client Address not found!",null,404);
+
+            }
+
+            $input['client_address_id'] = $client_address['id'];
 
         }
-
-        $input['client_address_id'] = $client_address['id'];
 
         $bill_primary = BillPrimary::where('bill_no',$bill_no)->first();
 
@@ -184,7 +185,7 @@ class BillController extends Controller
 
     }
 
-    public function addBillDetails(Request $request, $company_id, $financial_year, $financial_month,  $bill_no)
+    public function addBillDetails(Request $request, $bill_no)
     {
 
         $input = $request->only('name_of_product', 'service_code', 'qty', 'rate', 'total_amount');
@@ -269,7 +270,13 @@ class BillController extends Controller
 
         }
 
-        $total_amount = array_sum($bill_detail_amount->toArray());
+        $bill_detail_amount = array_filter($bill_detail_amount->toArray(), function($value){
+
+            return $value != null;
+
+        });
+
+        $total_amount = array_sum($bill_detail_amount);
 
         $bill_primary = BillPrimary::where('bill_no',$bill_no)->first();
 
@@ -367,7 +374,7 @@ class BillController extends Controller
     public function displayAllData($company_id, $financial_year, $financial_month, $bill_no)
     {
 
-        $bill = BillPrimary::with(['company', 'bank','company', 'client_address', 'client_address.client', 'billDetails'])->where('bill_no',$bill_no)->first();
+        $bill = BillPrimary::with(['company', 'bank','company', 'company.bank', 'client_address', 'client_address.client', 'billDetails'])->where('bill_no',$bill_no)->first();
 
         if(!$bill)
         {

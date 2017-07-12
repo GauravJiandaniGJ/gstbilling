@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\BillDetail;
 use App\BillPrimary;
+use App\Client;
 use App\DebitDetail;
 use App\DebitPrimary;
 use App\Helper;
+use Barryvdh\DomPDF\PDF as PDF;
 use Illuminate\Http\Request;
 
 class StatementController extends Controller
@@ -15,14 +17,23 @@ class StatementController extends Controller
     public function listOfStatement()
     {
         return response(array(
-            1 => 'Statement',
-            2 => 'Statement of debit',
-            3 => 'Statement of bill',
-            4 => 'Statement of total tax',
-            5 => 'Statement of total tax cgst',
-            6 => 'Statement of total tax sgst',
-            7 => 'Statement of total tax igst'
+            array('text' => 'Statement Entirely', 'id' => 1),
+            array('text' => 'Statement of Debit', 'id' => 2),
+            array('text' => 'Statement of GST Bill', 'id' => 3),
+            array('text' => 'Statement of Total Tax', 'id' => 4),
+            array('text' => 'Statement of Total Tax Cgst', 'id' => 5),
+            array('text' => 'Statement of Total Tax Sgst', 'id' => 6),
+            array('text' => 'Statement of Total Tax Igst', 'id' => 7)
         ),200);
+    }
+
+    public function listOfStatementClientWise()
+    {
+        return response(array(
+            array('text' => 'Statement of Debit', 'id' => 1),
+            array('text' => 'Statement of Bill', 'id' => 2)
+        ),200);
+
     }
 
     public function generateStatement(Request $request)
@@ -315,7 +326,21 @@ class StatementController extends Controller
 
         $total = array_sum($debit_amt_arr);
 
-        return response(array('debit'=>$debit_arr,'total'=>$total),200);
+        $pdf = PDF::loadView('pdf', ['debit' => $debit_arr, 'total' => $total]);
+
+        return $pdf->download('partywisedebit.pdf');
+
+    }
+
+    public function pdf()
+    {
+//        $clients = Client::all();
+
+        $pdf = app('dompdf.wrapper');
+
+        $pdf->loadView('debit_final');
+
+        return $pdf->download('clients.pdf');
 
     }
 
@@ -438,6 +463,11 @@ class StatementController extends Controller
         $bill['bill_detail'] = $bill_detail;
 
         return $bill;
+
+    }
+
+    public function buildPDF()
+    {
 
     }
 

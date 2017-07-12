@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Bank;
 use App\ClientAddress;
+use App\Company;
 use App\DebitDetail;
 use App\DebitPrimary;
 use App\Helper;
@@ -177,7 +178,7 @@ class DebitController extends Controller
 
     }
 
-    public function addDebitDetails(Request $request, $company_id, $financial_year, $financial_month,  $debit_no)
+    public function addDebitDetails(Request $request, $debit_no)
     {
 
         $input = $request->only('name_of_product', 'service_code', 'qty', 'rate', 'total_amount');
@@ -197,7 +198,7 @@ class DebitController extends Controller
 
     }
 
-    public function editDebitDetails(Request $request, $company_id, $financial_year, $financial_month, $debit_no, $debit_detail_no)
+    public function editDebitDetails(Request $request, $debit_no, $debit_detail_no)
     {
 
         $input = $request->only('name_of_product', 'service_code', 'qty', 'rate', 'total_amount');
@@ -223,15 +224,15 @@ class DebitController extends Controller
 
     }
 
-    public function deleteDebitDetail($company_id, $financial_year, $financial_month, $debit_no)
+    public function deleteDebitDetail($debit_detail_no)
     {
 
-        $debit_detail = DebitPrimary::where('debit_no',$debit_no)->first();
+        $debit_detail = DebitDetail::where('id',$debit_detail_no)->first();
 
         if(!$debit_detail)
         {
 
-            return Helper::apiError("No Debit detail found!",null,404);
+            return Helper::apiError("No Bill detail found!",null,404);
 
         }
 
@@ -253,7 +254,13 @@ class DebitController extends Controller
 
         }
 
-        $total_amount = array_sum($debit_detail_amount->toArray());
+        $debit_detail_amount = array_filter($debit_detail_amount->toArray(), function($value){
+
+            return $value != null;
+
+        });
+
+        $total_amount = array_sum($debit_detail_amount);
 
         $debit_primary = DebitPrimary::where('debit_no',$debit_no)->first();
 
@@ -339,6 +346,127 @@ class DebitController extends Controller
         $next_year = (int)$new_year + 1;
 
         return response(array("format" => "$company_short_name/$debit_no/$new_year-$next_year"),200);
+
+    }
+
+    public function quantityTotal($debit_no) {
+
+        $qtys = DebitDetail::where('debit_no',$debit_no)->where('qty','!=',null)->pluck('qty');
+
+        return array_sum($qtys->toArray());
+
+    }
+
+    public function amountTotal ($debit_no) {
+
+        $total_amt = DebitDetail::where('debit_no',$debit_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+        return array_sum($total_amt->toArray());
+
+    }
+
+    public function getDebitDetails ($debit_no) {
+
+        $debit_details = DebitDetail::where('debit_no',$debit_no)->get();
+
+        if(!$debit_details)
+        {
+            return Helper::apiError("Not found",null,404);
+        }
+
+        return $debit_details;
+
+    }
+
+    public function printDebit($company_id, $financial_year, $financial_month, $debit_no)
+    {
+//        $pdf = app('dompdf.wrapper');
+//        $pdf->loadHTML('<h1>Test</h1>');
+//        return $pdf->stream();
+
+        $debit_bill = DebitPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client'])->where('debit_no',$debit_no)->first();
+
+        if(!$debit_bill)
+        {
+
+            return Helper::apiError("Can't fetch data");
+
+        }
+
+        $debit_date = $debit_bill['debit_date'];
+
+        $debit_bill['debit_date'] = implode('-', array_reverse(explode('-', $debit_date)));;
+
+        $debit_detail = DebitDetail::where('debit_no',$debit_no)->where('name_of_product','!=',null)->get();
+
+        $debit_bill['debit_detail'] = $debit_detail;
+
+        $pdf = app('dompdf.wrapper');
+
+        $i = 0;
+
+        $qtys = DebitDetail::where('debit_no',$debit_no)->where('qty','!=',null)->pluck('qty');
+
+        $total_qty = array_sum($qtys->toArray());
+
+        $total_amt = DebitDetail::where('debit_no',$debit_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+        $total_amt = array_sum($total_amt->toArray());
+
+
+
+        $number = $total_amt;
+        $no = round($number);
+        $point = round($number - $no, 2) * 100;
+        $hundred = null;
+        $digits_1 = strlen($no);
+        $i = 0;
+        $str = array();
+        $words = array('0' => '', '1' => 'One', '2' => 'Two',
+            '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+            '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+            '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+            '13' => 'Thirteen', '14' => 'Fourteen',
+            '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+            '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+            '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+            '60' => 'Sixty', '70' => 'Seventy',
+            '80' => 'Eighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+            $divider = ($i == 2) ? 10 : 100;
+            $number = floor($no % $divider);
+            $no = floor($no / $divider);
+            $i += ($divider == 10) ? 1 : 2;
+            if ($number) {
+                $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+                $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+                $str [] = ($number < 21) ? $words[$number] .
+                    " " . $digits[$counter] . $plural . " " . $hundred
+                    :
+                    $words[floor($number / 10) * 10]
+                    . " " . $words[$number % 10] . " "
+                    . $digits[$counter] . $plural . " " . $hundred;
+            } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+            "." . $words[$point / 10] . " " .
+            $words[$point = $point % 10] : '';
+
+        if($points == '')
+        {
+            $in_words = $result . "Rupees only.";
+        }
+        else
+        {
+            $in_words = $result . "Rupees  " . $points . " Paise only.";
+        }
+
+        $pdf->loadView('debit_final', ['debit' => $debit_bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words]);
+
+        return $pdf->download('debit.pdf');
 
     }
 

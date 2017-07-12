@@ -205,7 +205,7 @@ class BillController extends Controller
 
     }
 
-    public function editBillDetails(Request $request, $company_id, $financial_year, $financial_month, $bill_no, $bill_detail_no)
+    public function editBillDetails(Request $request, $bill_no, $bill_detail_no)
     {
 
         $input = $request->only('name_of_product', 'service_code', 'qty', 'rate', 'total_amount');
@@ -231,28 +231,19 @@ class BillController extends Controller
 
     }
 
-    public function deleteBillDetail($company_id, $financial_year, $financial_month, $bill_no)
+    public function deleteBillDetail($bill_detail_no)
     {
 
-        $bill_detail = BillPrimary::where('bill_no',$bill_no)->first();
+        $bill_details = BillDetail::where('id',$bill_detail_no)->first();
 
-        $bill_details = BillDetail::where('bill_no',$bill_no)->get();
-
-        foreach ($bill_details as $bill)
-        {
-
-            $bill->delete();
-
-        }
-
-        if(!$bill_detail)
+        if(!$bill_details)
         {
 
             return Helper::apiError("No Bill detail found!",null,404);
 
         }
 
-        $bill_detail->delete();
+        $bill_details->delete();
 
         return response("",204);
 
@@ -411,6 +402,130 @@ class BillController extends Controller
 
     }
 
+    public function quantityTotal($bill_no) {
 
+        $qtys = BillDetail::where('bill_no',$bill_no)->where('qty','!=',null)->pluck('qty');
+
+        return array_sum($qtys->toArray());
+
+    }
+
+    public function amountTotal ($bill_no) {
+
+        $total_amt = BillDetail::where('bill_no',$bill_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+        return array_sum($total_amt->toArray());
+
+    }
+
+    public function getBillDetails ($bill_no) {
+
+        $bill_details = BillDetail::where('bill_no',$bill_no)->get();
+
+        if(!$bill_details)
+        {
+            return Helper::apiError("Not found",null,404);
+        }
+
+        return $bill_details;
+
+    }
+
+    public  function checkIfSameState($cid, $bill_no){
+
+    }
+
+    public function printGSTBill($company_id, $financial_year, $financial_month, $bill_no)
+    {
+//        $pdf = app('dompdf.wrapper');
+//        $pdf->loadHTML('<h1>Test</h1>');
+//        return $pdf->stream();
+
+        $bill = BillPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client'])->where('bill_no',$bill_no)->first();
+
+        if(!$bill)
+        {
+
+            return Helper::apiError("Can't fetch data");
+
+        }
+
+        $bill_date = $bill['bill_date'];
+
+        $bill['bill_date'] = implode('-', array_reverse(explode('-', $bill_date)));;
+
+        $bill_detail = BillDetail::where('bill_no',$bill_no)->where('name_of_product','!=',null)->get();
+
+        $bill['bill_detail'] = $bill_detail;
+
+        $pdf = app('dompdf.wrapper');
+
+        $i = 0;
+
+        $qtys = BillDetail::where('bill_no',$bill_no)->where('qty','!=',null)->pluck('qty');
+
+        $total_qty = array_sum($qtys->toArray());
+
+        $total_amt = BillDetail::where('bill_no',$bill_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+        $total_amt = array_sum($total_amt->toArray());
+
+
+        $number = $bill['final_amount'];
+        $no = round($number);
+        $point = round($number - $no, 2) * 100;
+        $hundred = null;
+        $digits_1 = strlen($no);
+        $i = 0;
+        $str = array();
+        $words = array('0' => '', '1' => 'One', '2' => 'Two',
+            '3' => 'Three', '4' => 'Four', '5' => 'Five', '6' => 'Six',
+            '7' => 'Seven', '8' => 'Eight', '9' => 'Nine',
+            '10' => 'Ten', '11' => 'Eleven', '12' => 'Twelve',
+            '13' => 'Thirteen', '14' => 'Fourteen',
+            '15' => 'Fifteen', '16' => 'Sixteen', '17' => 'Seventeen',
+            '18' => 'Eighteen', '19' =>'Nineteen', '20' => 'Twenty',
+            '30' => 'Thirty', '40' => 'Forty', '50' => 'Fifty',
+            '60' => 'Sixty', '70' => 'Seventy',
+            '80' => 'Eighty', '90' => 'Ninety');
+        $digits = array('', 'Hundred', 'Thousand', 'Lakh', 'Crore');
+        while ($i < $digits_1) {
+            $divider = ($i == 2) ? 10 : 100;
+            $number = floor($no % $divider);
+            $no = floor($no / $divider);
+            $i += ($divider == 10) ? 1 : 2;
+            if ($number) {
+                $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+                $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+                $str [] = ($number < 21) ? $words[$number] .
+                    " " . $digits[$counter] . $plural . " " . $hundred
+                    :
+                    $words[floor($number / 10) * 10]
+                    . " " . $words[$number % 10] . " "
+                    . $digits[$counter] . $plural . " " . $hundred;
+            } else $str[] = null;
+        }
+        $str = array_reverse($str);
+        $result = implode('', $str);
+        $points = ($point) ?
+            "." . $words[$point / 10] . " " .
+            $words[$point = $point % 10] : '';
+
+        if($points == '')
+        {
+            $in_word = $result . "Rupees only.";
+        }
+        else
+        {
+            $in_word = $result . " Rupees  " . $points . " Paise only.";
+        }
+
+        $in_words = explode(" ",$in_word);
+
+        $pdf->loadView('debit', ['bill' => $bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words]);
+
+        return $pdf->download('bill.pdf');
+
+    }
 
 }

@@ -234,7 +234,7 @@
     <col class="col7">
     <tbody>
     <tr class="row1">
-        <td class="column0 style24 s style24" colspan="7"><br><br>{{$debit['company']['name']}}</td>
+        <td class="column0 style24 s style24" colspan="7"><br>{{$debit['company']['name']}}</td>
     </tr>
     <tr class="row2">
         <td class="column0 style59 s style59" colspan="7">CARGO HANDLING &amp; SHIPPING AGENT</td>
@@ -315,17 +315,9 @@
         <td class="column6 style13 s">Value of Supply <span id="rupee">&#8377;</span></td>
         <td class="column7"></td>
     </tr>
-    <tr class="row20">
-        <td class="column0 style1 n"></td>
-        <td class="column1 style51 s style57" colspan="3"></td>
-        <td class="column4 style10 n"></td>
-        <td class="column5 style2 n"></td>
-        <td class="column6 style15 f"></td>
-        <td class="column7"></td>
-    </tr>
 
 
-{{$i=0}}
+    {{$i=0}}
     @foreach ($debit['debit_detail'] as $detail)
         {{$i=$i+1}}
         <tr class="row30">
@@ -333,31 +325,13 @@
             <td class="column1 style27 null style29" colspan="3">&nbsp;{{$detail['name_of_product']}}&nbsp;</td>
             <td class="column4 style9 null">{{$detail['qty']}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td class="column5 style4 null">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$detail['rate']}}</td>
-            <td class="column6 style5 null">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$detail['total_amount']}}</td>
+            <td class="column6 style5 null">&nbsp;&nbsp;&nbsp;&nbsp;{{$detail['total_amount']}}</td>
             <td class="column7"></td>
         </tr>
 
 
     @endforeach
 
-
-    <tr class="row30">
-        <td class="column0 style3 null"></td>
-        <td class="column1 style27 null style29" colspan="3"></td>
-        <td class="column4 style9 null"></td>
-        <td class="column5 style4 null"></td>
-        <td class="column6 style5 null"></td>
-        <td class="column7">&nbsp;</td>
-    </tr>
-
-    <tr class="row30">
-        <td class="column0 style3 null"></td>
-        <td class="column1 style27 null style29" colspan="3"></td>
-        <td class="column4 style9 null"></td>
-        <td class="column5 style4 null"></td>
-        <td class="column6 style5 null"></td>
-        <td class="column7">&nbsp;</td>
-    </tr>
 
     <tr class="row30">
         <td class="column0 style3 null"></td>

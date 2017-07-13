@@ -398,7 +398,7 @@
     <tr class="row33">
         <td class="column0 style74 s style75" colspan="3">Total :&nbsp;</td>
         <td class="column3 style28 null"></td>
-        <td class="column4 style16 f">&nbsp;&nbsp;{{$qty_total}}.00 &nbsp;&nbsp;&nbsp;</td>
+        <td class="column4 style16 f">&nbsp;&nbsp;{{$qty_total}} &nbsp;&nbsp;&nbsp;</td>
         <td class="column5 style8 null"></td>
         <td class="column6 style21 f">&nbsp;&nbsp; {{$total_amount}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7">&nbsp;</td>
@@ -418,7 +418,7 @@
         <td class="column0 style43 null style44" colspan="3">&nbsp;{{$in_words[0]}} {{ $in_words[1]}} {{ $in_words[2]}}</td>
         <td class="column3 style34 s">&nbsp;Add : CGST</td>
         <td class="column4 style10 n">9%</td>
-        <td class="column5 style11 s"><span id="rupee">&#8377;</span></td>
+        <td class="column5 style11 s"></td>
         <td class="column6 style22 f">&nbsp;&nbsp;{{$bill['after_cgst']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7">&nbsp;</td>
     </tr>
@@ -426,7 +426,7 @@
         <td class="column0 style43 null style44" colspan="3">&nbsp;{{ $in_words[3]}} {{ $in_words[4]}} {{ $in_words[5]}} {{ $in_words[6]}}</td>
         <td class="column3 style34 s">&nbsp;Add : SGST</td>
         <td class="column4 style10 n">9%</td>
-        <td class="column5 style11 s"><span id="rupee">&#8377;</span></td>
+        <td class="column5 style11 s"></td>
         <td class="column6 style22 f">&nbsp;&nbsp;{{$bill['after_sgst']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7">&nbsp;</td>
     </tr>
@@ -434,7 +434,7 @@
         <td class="column0 style43 null style44" colspan="3"> &nbsp;{{ $in_words[7]}} {{  $in_words[8] }} {{ $in_words[9]}} {{ $in_words[10]}}</td>
         <td class="column3 style34 s">&nbsp;Add : IGST</td>
         <td class="column4 style10 n">0%</td>
-        <td class="column5 style11 s"><span id="rupee">&#8377;</span></td>
+        <td class="column5 style11 s"></td>
         <td class="column6 style22 f">{{$bill['after_igst']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7"></td>
     </tr>
@@ -481,7 +481,7 @@
         <td class="column7"></td>
     </tr>
     <tr class="row45">
-        <td class="column0 style43 s style45" colspan="3">&nbsp;Interest will be charged @ 18% p.a., if the amount is not paid within 7 days.</td>
+        <td class="column0 style43 s style45" colspan="3">&nbsp;Interest will be charged @ 18% p.a., if the amount is not paid within 30 days.</td>
         <td class="column3 style19 null"></td>
         <td class="column4 style32 null"><img src="{{$image}}"></td>
         <td class="column5 style32 null"></td>

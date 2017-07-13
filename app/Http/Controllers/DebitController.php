@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Bank;
+use App\BGRBHRDebitDetail;
+use App\BGRBHRDebitPrimary;
 use App\ClientAddress;
 use App\Company;
 use App\DebitDetail;
@@ -39,6 +41,24 @@ class DebitController extends Controller
     public function latestDebitNo($company_id, $financial_year, $financial_month)
     {
 
+        if($company_id != 1)
+        {
+
+            $list = BGRBHRDebitPrimary::all();
+
+            if(!$list)
+            {
+
+                return Helper::apiError("Not found",404);
+
+            }
+
+            $size = sizeof($list) - 1;
+
+            return $list[$size]['debit_no'] + 1;
+
+        }
+
         $list = DebitPrimary::all();
 
         if(!$list)
@@ -52,10 +72,9 @@ class DebitController extends Controller
 
         return $list[$size]['debit_no'] + 1;
 
-
     }
 
-        public function debitListPending($company_id, $financial_year, $financial_month)
+    public function debitListPending($company_id, $financial_year, $financial_month)
     {
 
         $list = DebitPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','!=','final')->get();
@@ -121,6 +140,22 @@ class DebitController extends Controller
 
         $input['status'] = 'edit';
 
+        if($company_id != 1)
+        {
+
+            $debit_primary = BGRBHRDebitPrimary::create($input);
+
+            if(!$debit_primary)
+            {
+
+                return Helper::apiError("Can't create debit primary!",null,404);
+
+            }
+
+            return $debit_primary;
+
+        }
+
         $debit_primary = DebitPrimary::create($input);
 
         if(!$debit_primary)
@@ -134,7 +169,7 @@ class DebitController extends Controller
 
     }
 
-    public function updatePrimary(Request $request, $bill_no)
+    public function updatePrimary(Request $request, $company_id, $financial_year, $financial_month, $bill_no)
     {
 
         $input = $request->only('debit_date', 'description', 'bank_id');
@@ -157,6 +192,33 @@ class DebitController extends Controller
 
         }
 
+
+        if($company_id != 1)
+        {
+
+            $debit_primary = BGRBHRDebitPrimary::where('debit_no',$bill_no)->first();
+
+            if(!$debit_primary)
+            {
+
+                return Helper::apiError("Can't fetch Debit Primary!",null,404);
+
+            }
+
+            $input = array_filter($input, function($value){
+
+                return $value != null;
+
+            });
+
+            $debit_primary->update($input);
+
+            return $debit_primary;
+
+
+        }
+
+
         $debit_primary = DebitPrimary::where('debit_no',$bill_no)->first();
 
         if(!$debit_primary)
@@ -178,12 +240,28 @@ class DebitController extends Controller
 
     }
 
-    public function addDebitDetails(Request $request, $debit_no)
+    public function addDebitDetails(Request $request, $company_id, $financial_year, $financial_month,  $debit_no)
     {
 
         $input = $request->only('name_of_product', 'qty', 'rate', 'total_amount');
 
         $input['debit_no'] = $debit_no;
+
+        if($company_id != 1)
+        {
+
+            $debit_detail = BGRBHRDebitDetail::create($input);
+
+            if(!$debit_detail)
+            {
+
+                return Helper::apiError("Can't create Debit detail!",null,404);
+
+            }
+
+            return $debit_detail;
+
+        }
 
         $debit_detail = DebitDetail::create($input);
 
@@ -198,7 +276,7 @@ class DebitController extends Controller
 
     }
 
-    public function editDebitDetails(Request $request, $debit_no, $debit_detail_no)
+    public function editDebitDetails(Request $request, $company_id, $financial_year, $financial_month,  $debit_no, $debit_detail_no)
     {
 
         $input = $request->only('name_of_product', 'qty', 'rate', 'total_amount');
@@ -208,6 +286,24 @@ class DebitController extends Controller
             return $value != null;
 
         });
+
+        if($company_id!=1)
+        {
+
+            $debit_detail = BGRBHRDebitDetail::where('debit_no',$debit_no)->where('id',$debit_detail_no)->first();
+
+            if(!$debit_detail)
+            {
+
+                return Helper::apiError("No Debit detail found!",null,404);
+
+            }
+
+            $debit_detail->update($input);
+
+            return $debit_detail;
+
+        }
 
         $debit_detail = DebitDetail::where('debit_no',$debit_no)->where('id',$debit_detail_no)->first();
 
@@ -224,8 +320,26 @@ class DebitController extends Controller
 
     }
 
-    public function deleteDebitDetail($debit_detail_no)
+    public function deleteDebitDetail($company_id, $financial_year, $financial_month,  $debit_detail_no)
     {
+
+        if($company_id != 1)
+        {
+
+            $debit_detail = BGRBHRDebitDetail::where('id',$debit_detail_no)->first();
+
+            if(!$debit_detail)
+            {
+
+                return Helper::apiError("No Bill detail found!",null,404);
+
+            }
+
+            $debit_detail->delete();
+
+            return response("",204);
+
+        }
 
         $debit_detail = DebitDetail::where('id',$debit_detail_no)->first();
 
@@ -245,7 +359,18 @@ class DebitController extends Controller
     public function calculateTotalAmount($company_id, $financial_year, $financial_month, $debit_no)
     {
 
-        $debit_detail_amount = DebitDetail::where('debit_no',$debit_no)->pluck('total_amount');
+        if($company_id != 1)
+        {
+
+            $debit_detail_amount = BGRBHRDebitDetail::where('debit_no',$debit_no)->pluck('total_amount');
+
+        }
+        else
+        {
+
+            $debit_detail_amount = DebitDetail::where('debit_no',$debit_no)->pluck('total_amount');
+
+        }
 
         if(sizeof($debit_detail_amount)==0)
         {
@@ -262,7 +387,18 @@ class DebitController extends Controller
 
         $total_amount = array_sum($debit_detail_amount);
 
-        $debit_primary = DebitPrimary::where('debit_no',$debit_no)->first();
+        if($company_id!=1)
+        {
+
+            $debit_primary = BGRBHRDebitPrimary::where('debit_no',$debit_no)->first();
+
+        }
+        else
+        {
+
+            $debit_primary = DebitPrimary::where('debit_no',$debit_no)->first();
+
+        }
 
         if(!$debit_primary)
         {
@@ -280,7 +416,18 @@ class DebitController extends Controller
     public function confirmBill($company_id, $financial_year, $financial_month, $debit_no)
     {
 
-        $debit_primary = DebitPrimary::where('debit_no',$debit_no)->first();
+        if($company_id != 1)
+        {
+
+            $debit_primary = BGRBHRDebitPrimary::where('debit_no',$debit_no)->first();
+
+        }
+        else
+        {
+
+            $debit_primary = DebitPrimary::where('debit_no',$debit_no)->first();
+
+        }
 
         if(!$debit_primary)
         {
@@ -312,7 +459,18 @@ class DebitController extends Controller
     public function displayAllData($company_id, $financial_year, $financial_month, $debit_no)
     {
 
-        $debit_bill = DebitPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client', 'debitDetails'])->where('debit_no',$debit_no)->first();
+        if($company_id != 1)
+        {
+
+            $debit_bill = BGRBHRDebitPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client', 'debitDetails'])->where('debit_no',$debit_no)->first();
+
+        }
+        else
+        {
+
+            $debit_bill = DebitPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client', 'debitDetails'])->where('debit_no',$debit_no)->first();
+
+        }
 
         if(!$debit_bill)
         {
@@ -349,25 +507,58 @@ class DebitController extends Controller
 
     }
 
-    public function quantityTotal($debit_no) {
+    public function quantityTotal($company_id, $financial_year, $financial_month, $debit_no) {
 
-        $qtys = DebitDetail::where('debit_no',$debit_no)->where('qty','!=',null)->pluck('qty');
+        if($company_id != 1)
+        {
 
-        return array_sum($qtys->toArray());
+            $qtys = BGRBHRDebitDetail::where('debit_no',$debit_no)->where('qty','!=',null)->pluck('qty');
+
+            return array_sum($qtys->toArray());
+
+        }
+        else
+        {
+            $qtys = DebitDetail::where('debit_no',$debit_no)->where('qty','!=',null)->pluck('qty');
+
+            return array_sum($qtys->toArray());
+        }
 
     }
 
-    public function amountTotal ($debit_no) {
+    public function amountTotal ($company_id, $financial_year, $financial_month, $debit_no) {
 
-        $total_amt = DebitDetail::where('debit_no',$debit_no)->where('total_amount','!=',null)->pluck('total_amount');
+        if($company_id != 1)
+        {
 
-        return array_sum($total_amt->toArray());
+            $total_amt = BGRBHRDebitDetail::where('debit_no',$debit_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+            return array_sum($total_amt->toArray());
+
+        }
+        else
+        {
+
+            $total_amt = DebitDetail::where('debit_no',$debit_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+            return array_sum($total_amt->toArray());
+
+        }
 
     }
 
-    public function getDebitDetails ($debit_no) {
+    public function getDebitDetails ($company_id, $financial_year, $financial_month, $debit_no) {
 
-        $debit_details = DebitDetail::where('debit_no',$debit_no)->get();
+        if($company_id != 1)
+        {
+            $debit_details = BGRBHRDebitDetail::where('debit_no',$debit_no)->get();
+        }
+        else
+        {
+
+            $debit_details = DebitDetail::where('debit_no',$debit_no)->get();
+
+        }
 
         if(!$debit_details)
         {
@@ -384,7 +575,18 @@ class DebitController extends Controller
 //        $pdf->loadHTML('<h1>Test</h1>');
 //        return $pdf->stream();
 
-        $debit_bill = DebitPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client'])->where('debit_no',$debit_no)->first();
+        if($company_id != 1)
+        {
+
+            $debit_bill = BGRBHRDebitPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client'])->where('debit_no',$debit_no)->first();
+
+        }
+        else
+        {
+
+            $debit_bill = DebitPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client'])->where('debit_no',$debit_no)->first();
+
+        }
 
         if(!$debit_bill)
         {
@@ -398,8 +600,18 @@ class DebitController extends Controller
         $debit_bill['debit_date'] = implode('-', array_reverse(explode('-', $debit_date)));;
 
 
+        if($company_id != 1)
+        {
 
-        $debit_detaill = DebitPrimary::with(['company'])->where('debit_no',$debit_no)->first();
+            $debit_detaill = BGRBHRDebitPrimary::with(['company'])->where('debit_no',$debit_no)->first();
+
+        }
+        else
+        {
+
+            $debit_detaill = DebitPrimary::with(['company'])->where('debit_no',$debit_no)->first();
+
+        }
 
         if(!$debit_detaill)
         {
@@ -419,8 +631,18 @@ class DebitController extends Controller
         $debit_bill['final_debit_no'] = "$company_short_name/$debit_no";
 
 
+        if($company_id != 1)
+        {
 
-        $debit_detail = DebitDetail::where('debit_no',$debit_no)->where('name_of_product','!=',null)->get();
+            $debit_detail = BGRBHRDebitDetail::where('debit_no',$debit_no)->where('name_of_product','!=',null)->get();
+
+        }
+        else
+        {
+
+            $debit_detail = DebitDetail::where('debit_no',$debit_no)->where('name_of_product','!=',null)->get();
+
+        }
 
         $debit_bill['debit_detail'] = $debit_detail;
 
@@ -428,11 +650,35 @@ class DebitController extends Controller
 
         $i = 0;
 
-        $qtys = DebitDetail::where('debit_no',$debit_no)->where('qty','!=',null)->pluck('qty');
+
+
+        if($company_id != 1)
+        {
+
+            $qtys = BGRBHRDebitDetail::where('debit_no',$debit_no)->where('qty','!=',null)->pluck('qty');
+
+        }
+        else
+        {
+
+            $qtys = DebitDetail::where('debit_no',$debit_no)->where('qty','!=',null)->pluck('qty');
+
+        }
 
         $total_qty = array_sum($qtys->toArray());
 
-        $total_amt = DebitDetail::where('debit_no',$debit_no)->where('total_amount','!=',null)->pluck('total_amount');
+        if($company_id != 1)
+        {
+
+            $total_amt = BGRBHRDebitDetail::where('debit_no',$debit_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+        }
+        else
+        {
+
+            $total_amt = DebitDetail::where('debit_no',$debit_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+        }
 
         $total_amt = array_sum($total_amt->toArray());
 
@@ -489,9 +735,23 @@ class DebitController extends Controller
 
         $image = public_path('signature.jpg');
 
-        $pdf->loadView('debit_final', ['debit' => $debit_bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words,'image' => $image]);
 
-        return $pdf->download('debit.pdf');
+        if($debit_bill['company_id'] != 1)
+        {
+
+            $pdf->loadView('debit_bhr', ['debit' => $debit_bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words,'image' => $image]);
+
+            return $pdf->download('debit.pdf');
+
+        }
+        else
+        {
+
+            $pdf->loadView('debit_final', ['debit' => $debit_bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words,'image' => $image]);
+
+            return $pdf->download('debit.pdf');
+
+        }
 
     }
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Bank;
+use App\BGRBHRBillDetail;
+use App\BGRBHRBillPrimary;
 use App\BillDetail;
 use App\BillPrimary;
 use App\ClientAddress;
@@ -16,7 +18,18 @@ class BillController extends Controller
     public function billList($company_id, $financial_year, $financial_month)
     {
 
-        $list = BillPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','=','final')->get();
+        if($company_id != 1)
+        {
+
+            $list = BGRBHRBillPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','=','final')->get();
+
+        }
+        else
+        {
+
+            $list = BillPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','=','final')->get();
+
+        }
 
         if(!$list)
         {
@@ -39,7 +52,18 @@ class BillController extends Controller
     public function billListPending($company_id, $financial_year, $financial_month)
     {
 
-        $list = BillPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','!=','final')->get();
+        if($company_id != 1)
+        {
+
+            $list = BGRBHRBillPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','!=','final')->get();
+
+        }
+        else
+        {
+
+            $list = BillPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','!=','final')->get();
+
+        }
 
         if(!$list)
         {
@@ -62,7 +86,18 @@ class BillController extends Controller
     public function latestBillNo($company_id, $financial_year, $financial_month)
     {
 
-        $list = BillPrimary::all();
+        if($company_id != 1)
+        {
+
+            $list = BGRBHRBillPrimary::all();
+
+        }
+        else
+        {
+
+            $list = BillPrimary::all();
+
+        }
 
         if(!$list)
         {
@@ -128,7 +163,18 @@ class BillController extends Controller
 
         $input['status'] = 'edit';
 
-        $bill_primary = BillPrimary::create($input);
+        if($company_id != 1)
+        {
+
+            $bill_primary = BGRBHRBillPrimary::create($input);
+
+        }
+        else
+        {
+
+            $bill_primary = BillPrimary::create($input);
+
+        }
 
         if(!$bill_primary)
         {
@@ -141,7 +187,7 @@ class BillController extends Controller
 
     }
 
-    public function updatePrimary(Request $request, $bill_no)
+    public function updatePrimary(Request $request,$company_id, $financial_year, $financial_month, $bill_no)
     {
 
         $input = $request->only('bill_date', 'description', 'bank_id');
@@ -164,7 +210,18 @@ class BillController extends Controller
 
         }
 
-        $bill_primary = BillPrimary::where('bill_no',$bill_no)->first();
+        if($company_id != 1)
+        {
+
+            $bill_primary = BGRBHRBillPrimary::where('bill_no',$bill_no)->first();
+
+        }
+        else
+        {
+
+            $bill_primary = BillPrimary::where('bill_no',$bill_no)->first();
+
+        }
 
         if(!$bill_primary)
         {
@@ -185,14 +242,25 @@ class BillController extends Controller
 
     }
 
-    public function addBillDetails(Request $request, $bill_no)
+    public function addBillDetails(Request $request,$company_id, $financial_year, $financial_month, $bill_no)
     {
 
         $input = $request->only('name_of_product', 'service_code', 'qty', 'rate', 'total_amount');
 
         $input['bill_no'] = $bill_no;
 
-        $bill_detail = BillDetail::create($input);
+        if($company_id != 1)
+        {
+
+            $bill_detail = BGRBHRBillDetail::create($input);
+
+        }
+        else
+        {
+
+            $bill_detail = BillDetail::create($input);
+
+        }
 
         if(!$bill_detail)
         {
@@ -205,7 +273,7 @@ class BillController extends Controller
 
     }
 
-    public function editBillDetails(Request $request, $bill_no, $bill_detail_no)
+    public function editBillDetails(Request $request, $company_id, $financial_year, $financial_month, $bill_no, $bill_detail_no)
     {
 
         $input = $request->only('name_of_product', 'service_code', 'qty', 'rate', 'total_amount');
@@ -216,7 +284,18 @@ class BillController extends Controller
 
         });
 
-        $bill_detail = BillDetail::where('bill_no',$bill_no)->where('id',$bill_detail_no)->first();
+        if($company_id != 1)
+        {
+
+            $bill_detail = BGRBHRBillDetail::where('bill_no',$bill_no)->where('id',$bill_detail_no)->first();
+
+        }
+        else
+        {
+
+            $bill_detail = BillDetail::where('bill_no',$bill_no)->where('id',$bill_detail_no)->first();
+
+        }
 
         if(!$bill_detail)
         {
@@ -231,10 +310,21 @@ class BillController extends Controller
 
     }
 
-    public function deleteBillDetail($bill_detail_no)
+    public function deleteBillDetail($company_id, $financial_year, $financial_month, $bill_detail_no)
     {
 
-        $bill_details = BillDetail::where('id',$bill_detail_no)->first();
+        if($company_id != 1)
+        {
+
+            $bill_details = BGRBHRBillDetail::where('id',$bill_detail_no)->first();
+
+        }
+        else
+        {
+
+            $bill_details = BillDetail::where('id',$bill_detail_no)->first();
+
+        }
 
         if(!$bill_details)
         {
@@ -252,7 +342,18 @@ class BillController extends Controller
     public function calculateTotalAmount($company_id, $financial_year, $financial_month, $bill_no)
     {
 
-        $bill_detail_amount = BillDetail::where('bill_no',$bill_no)->pluck('total_amount');
+        if($company_id != 1)
+        {
+
+            $bill_detail_amount = BGRBHRBillDetail::where('bill_no',$bill_no)->pluck('total_amount');
+
+        }
+        else
+        {
+
+            $bill_detail_amount = BillDetail::where('bill_no',$bill_no)->pluck('total_amount');
+
+        }
 
         if(sizeof($bill_detail_amount)==0)
         {
@@ -269,7 +370,18 @@ class BillController extends Controller
 
         $total_amount = array_sum($bill_detail_amount);
 
-        $bill_primary = BillPrimary::where('bill_no',$bill_no)->first();
+        if($company_id != 1)
+        {
+
+            $bill_primary = BGRBHRBillPrimary::where('bill_no',$bill_no)->first();
+
+        }
+        else
+        {
+
+            $bill_primary = BillPrimary::where('bill_no',$bill_no)->first();
+
+        }
 
         if(!$bill_primary)
         {
@@ -280,7 +392,18 @@ class BillController extends Controller
 
         $company = Company::where('id',$company_id)->first();
 
-        $bill = BillPrimary::with(['client_address'])->where('bill_no',$bill_no)->first();
+        if($company_id != 1)
+        {
+
+            $bill = BGRBHRBillPrimary::with(['client_address'])->where('bill_no',$bill_no)->first();
+
+        }
+        else
+        {
+
+            $bill = BillPrimary::with(['client_address'])->where('bill_no',$bill_no)->first();
+
+        }
 
         if(!$company && !$bill)
         {
@@ -333,7 +456,18 @@ class BillController extends Controller
     public function confirmBill($company_id, $financial_year, $financial_month, $bill_no)
     {
 
-        $bill_primary = BillPrimary::where('bill_no',$bill_no)->first();
+        if($company_id != 1)
+        {
+
+            $bill_primary = BGRBHRBillPrimary::where('bill_no',$bill_no)->first();
+
+        }
+        else
+        {
+
+            $bill_primary = BillPrimary::where('bill_no',$bill_no)->first();
+
+        }
 
         if(!$bill_primary)
         {
@@ -365,7 +499,18 @@ class BillController extends Controller
     public function displayAllData($company_id, $financial_year, $financial_month, $bill_no)
     {
 
-        $bill = BillPrimary::with(['company', 'bank','company', 'company.bank', 'client_address', 'client_address.client', 'billDetails'])->where('bill_no',$bill_no)->first();
+        if($company_id != 1)
+        {
+
+            $bill = BGRBHRBillPrimary::with(['company', 'bank','company', 'company.bank', 'client_address', 'client_address.client', 'billDetails'])->where('bill_no',$bill_no)->first();
+
+        }
+        else
+        {
+
+            $bill = BillPrimary::with(['company', 'bank','company', 'company.bank', 'client_address', 'client_address.client', 'billDetails'])->where('bill_no',$bill_no)->first();
+
+        }
 
         if(!$bill)
         {
@@ -381,7 +526,18 @@ class BillController extends Controller
     public function bill_no($company_id, $financial_year, $financial_month, $bill_no)
     {
 
-        $bill_detail = BillPrimary::with(['company'])->where('bill_no',$bill_no)->first();
+        if($company_id != 1)
+        {
+
+            $bill_detail = BGRBHRBillPrimary::with(['company'])->where('bill_no',$bill_no)->first();
+
+        }
+        else
+        {
+
+            $bill_detail = BillPrimary::with(['company'])->where('bill_no',$bill_no)->first();
+
+        }
 
         if(!$bill_detail)
         {
@@ -402,25 +558,59 @@ class BillController extends Controller
 
     }
 
-    public function quantityTotal($bill_no) {
+    public function quantityTotal($company_id, $financial_year, $financial_month, $bill_no) {
 
-        $qtys = BillDetail::where('bill_no',$bill_no)->where('qty','!=',null)->pluck('qty');
+        if($company_id != 1)
+        {
+
+            $qtys = BGRBHRBillDetail::where('bill_no',$bill_no)->where('qty','!=',null)->pluck('qty');
+
+        }
+        else
+        {
+
+            $qtys = BillDetail::where('bill_no',$bill_no)->where('qty','!=',null)->pluck('qty');
+
+        }
 
         return array_sum($qtys->toArray());
 
     }
 
-    public function amountTotal ($bill_no) {
+    public function amountTotal ($company_id, $financial_year, $financial_month, $bill_no) {
 
-        $total_amt = BillDetail::where('bill_no',$bill_no)->where('total_amount','!=',null)->pluck('total_amount');
+        if($company_id != 1)
+        {
+
+            $total_amt = BGRBHRBillDetail::where('bill_no',$bill_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+        }
+        else
+        {
+
+            $total_amt = BillDetail::where('bill_no',$bill_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+        }
 
         return array_sum($total_amt->toArray());
 
     }
 
-    public function getBillDetails ($bill_no) {
+    public function getBillDetails ($company_id, $financial_year, $financial_month, $bill_no) {
 
-        $bill_details = BillDetail::where('bill_no',$bill_no)->get();
+
+        if($company_id != 1)
+        {
+
+            $bill_details = BGRBHRBillDetail::where('bill_no',$bill_no)->get();
+
+        }
+        else
+        {
+
+            $bill_details = BillDetail::where('bill_no',$bill_no)->get();
+
+        }
 
         if(!$bill_details)
         {
@@ -431,9 +621,6 @@ class BillController extends Controller
 
     }
 
-    public  function checkIfSameState($cid, $bill_no){
-
-    }
 
     public function printGSTBill($company_id, $financial_year, $financial_month, $bill_no)
     {
@@ -441,7 +628,19 @@ class BillController extends Controller
 //        $pdf->loadHTML('<h1>Test</h1>');
 //        return $pdf->stream();
 
-        $bill = BillPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client'])->where('bill_no',$bill_no)->first();
+
+        if($company_id != 1)
+        {
+
+            $bill = BGRBHRBillPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client'])->where('bill_no',$bill_no)->first();
+
+        }
+        else
+        {
+
+            $bill = BillPrimary::with(['company', 'bank', 'company', 'company.bank', 'client_address', 'client_address.client'])->where('bill_no',$bill_no)->first();
+
+        }
 
         if(!$bill)
         {
@@ -456,8 +655,18 @@ class BillController extends Controller
 
 
 
+        if($company_id != 1)
+        {
 
-        $bill_detaill = BillPrimary::with(['company'])->where('bill_no',$bill_no)->first();
+            $bill_detaill = BGRBHRBillPrimary::with(['company'])->where('bill_no',$bill_no)->first();
+
+        }
+        else
+        {
+
+            $bill_detaill = BillPrimary::with(['company'])->where('bill_no',$bill_no)->first();
+
+        }
 
         if(!$bill_detaill)
         {
@@ -474,10 +683,21 @@ class BillController extends Controller
 
         $next_year = (int)$new_year + 1;
 
-        $gst = 'GST';
-        $bill['final_bill_no'] = "$company_short_name$gst/$bill_no/$new_year-$next_year";
+        $gst = 'G';
+        $bill['final_bill_no'] = "$company_short_name/$gst$bill_no/$new_year-$next_year";
 
-        $bill_detail = BillDetail::where('bill_no',$bill_no)->where('name_of_product','!=',null)->get();
+        if($company_id != 1)
+        {
+
+            $bill_detail = BGRBHRBillDetail::where('bill_no',$bill_no)->where('name_of_product','!=',null)->get();
+
+        }
+        else
+        {
+
+            $bill_detail = BillDetail::where('bill_no',$bill_no)->where('name_of_product','!=',null)->get();
+
+        }
 
         $bill['bill_detail'] = $bill_detail;
 
@@ -485,14 +705,35 @@ class BillController extends Controller
 
         $i = 0;
 
-        $qtys = BillDetail::where('bill_no',$bill_no)->where('qty','!=',null)->pluck('qty');
+        if($company_id != 1)
+        {
+
+            $qtys = BGRBHRBillDetail::where('bill_no',$bill_no)->where('qty','!=',null)->pluck('qty');
+
+        }
+        else
+        {
+
+            $qtys = BillDetail::where('bill_no',$bill_no)->where('qty','!=',null)->pluck('qty');
+
+        }
 
         $total_qty = array_sum($qtys->toArray());
 
-        $total_amt = BillDetail::where('bill_no',$bill_no)->where('total_amount','!=',null)->pluck('total_amount');
+        if($company_id != 1)
+        {
+
+            $total_amt = BGRBHRBillDetail::where('bill_no',$bill_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+        }
+        else
+        {
+
+            $total_amt = BillDetail::where('bill_no',$bill_no)->where('total_amount','!=',null)->pluck('total_amount');
+
+        }
 
         $total_amt = array_sum($total_amt->toArray());
-
 
         $number = $bill['final_amount'];
         $no = round($number);
@@ -543,14 +784,13 @@ class BillController extends Controller
             $in_word = $result . " Rupees  " . $points . " Paise only.";
         }
 
-
         $image = public_path('signature.jpg');
 
         $in_words = explode(" ",$in_word);
 
-        $pdf->loadView('debit', ['bill' => $bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words, 'image'=>$image]);
+            $pdf->loadView('debit', ['bill' => $bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words, 'image'=>$image]);
 
-        return $pdf->download('bill.pdf');
+            return $pdf->download('bill.pdf');
 
     }
 

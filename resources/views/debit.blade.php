@@ -9,6 +9,9 @@
     <style type="text/css">
         html { font-family:Calibri, Arial, Helvetica, sans-serif; font-size:11pt; background-color:white }
         table { border-collapse:collapse; page-break-after:always }
+        #rupee {
+            font-family: DejaVu Sans;
+        }
         .gridlines td { border:1px dotted black }
         .gridlines th { border:1px dotted black }
         .b { text-align:center }
@@ -255,7 +258,7 @@
     <col class="col7">
     <tbody>
     <tr class="row1">
-        <td class="column0 style40 s style40" colspan="7">{{$bill['company']['name']}}</td>
+        <td class="column0 style40 s style40" colspan="7"><br>{{$bill['company']['name']}}</td>
         <td class="column7"></td>
     </tr>
     <tr class="row2">
@@ -292,17 +295,17 @@
     </tr>
     <tr class="row9">
         <td class="column0 style56 s style57" colspan="2">&nbsp;Invoice No.&nbsp;:</td>
-        <td class="column2 style44 null style45" colspan="5">&nbsp;{{$bill['bill_no']}}</td>
+        <td class="column2 style44 null style45" colspan="5">{{$bill['final_bill_no']}}</td>
         <td class="column7"></td>
     </tr>
     <tr class="row10">
         <td class="column0 style56 s style57" colspan="2">&nbsp;Invoice Date&nbsp;:</td>
-        <td class="column2 style81 null style82" colspan="5">&nbsp;{{$bill['bill_date']}}</td>
+        <td class="column2 style81 null style82" colspan="5">{{$bill['bill_date']}}</td>
         <td class="column7"></td>
     </tr>
     <tr class="row11">
         <td class="column0 style56 s style57" colspan="2">&nbsp;GSTIN&nbsp;: </td>
-        <td class="column2 style44 null style45" colspan="5">&nbsp;{{$bill['company']['gstin']}}</td>
+        <td class="column2 style44 null style45" colspan="5">{{$bill['company']['gstin']}}</td>
         <td class="column7"></td>
     </tr>
     <tr class="row12">
@@ -344,8 +347,8 @@
         <td class="column1 style52 s style53" colspan="2">&nbsp;Name of Product / Service</td>
         <td class="column3 style25 s">Service Code</td>
         <td class="column4 style25 s">Qty</td>
-        <td class="column5 style25 s">Rate</td>
-        <td class="column6 style17 s">Total</td>
+        <td class="column5 style25 s">Rate <span id="rupee">&#8377;</span></td>
+        <td class="column6 style17 s">Total <span id="rupee">&#8377;</span></td>
         <td class="column7"></td>
     </tr>
     <tr class="row21">
@@ -383,17 +386,6 @@
     @endforeach
 
 
-
-    <tr class="row25">
-        <td class="column0 style3 null"></td>
-        <td class="column1 style19 null"></td>
-        <td class="column2 style20 null"></td>
-        <td class="column3 style26 null"></td>
-        <td class="column4 style13 null"></td>
-        <td class="column5 style4 null"></td>
-        <td class="column6 style5 null"></td>
-        <td class="column7">&nbsp;</td>
-    </tr>
     <tr class="row31">
         <td class="column0 style3 null"></td>
         <td class="column1 style43 null style44" colspan="2"></td>
@@ -418,7 +410,7 @@
     <tr class="row35">
         <td class="column0 style41 s style42" colspan="3">&nbsp;Total Invoice Amount in Words:</td>
         <td class="column3 style41 s style42" colspan="2">Total Amount Before Tax</td>
-        <td class="column5 style9 s">`</td>
+        <td class="column5 style9 s"><span id="rupee">&#8377;</span></td>
         <td class="column6 style21 f">&nbsp;&nbsp;{{$total_amount}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7">&nbsp;</td>
     </tr>
@@ -426,7 +418,7 @@
         <td class="column0 style43 null style44" colspan="3">&nbsp;{{$in_words[0]}} {{ $in_words[1]}} {{ $in_words[2]}}</td>
         <td class="column3 style34 s">&nbsp;Add : CGST</td>
         <td class="column4 style10 n">9%</td>
-        <td class="column5 style11 s">`</td>
+        <td class="column5 style11 s"><span id="rupee">&#8377;</span></td>
         <td class="column6 style22 f">&nbsp;&nbsp;{{$bill['after_cgst']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7">&nbsp;</td>
     </tr>
@@ -434,7 +426,7 @@
         <td class="column0 style43 null style44" colspan="3">&nbsp;{{ $in_words[3]}} {{ $in_words[4]}} {{ $in_words[5]}} {{ $in_words[6]}}</td>
         <td class="column3 style34 s">&nbsp;Add : SGST</td>
         <td class="column4 style10 n">9%</td>
-        <td class="column5 style11 s">`</td>
+        <td class="column5 style11 s"><span id="rupee">&#8377;</span></td>
         <td class="column6 style22 f">&nbsp;&nbsp;{{$bill['after_sgst']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7">&nbsp;</td>
     </tr>
@@ -442,21 +434,21 @@
         <td class="column0 style43 null style44" colspan="3"> &nbsp;{{ $in_words[7]}} {{  $in_words[8] }} {{ $in_words[9]}} {{ $in_words[10]}}</td>
         <td class="column3 style34 s">&nbsp;Add : IGST</td>
         <td class="column4 style10 n">0%</td>
-        <td class="column5 style11 s">`</td>
+        <td class="column5 style11 s"><span id="rupee">&#8377;</span></td>
         <td class="column6 style22 f">{{$bill['after_igst']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7"></td>
     </tr>
     <tr class="row39">
         <td class="column0 style47 null style48" colspan="3"></td>
         <td class="column3 style49 s style50" colspan="2">&nbsp;Tax Amount : GST</td>
-        <td class="column5 style12 s">`</td>
+        <td class="column5 style12 s"><span id="rupee">&#8377;</span></td>
         <td class="column6 style21 f">&nbsp;&nbsp;{{$bill['total_gst']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7"></td>
     </tr>
     <tr class="row40">
         <td class="column0 style51 s style51" colspan="3">: Bank Details :</td>
         <td class="column3 style52 s style53" colspan="2">Total Amount After Tax</td>
-        <td class="column5 style35 s">`</td>
+        <td class="column5 style35 s"><span id="rupee">&#8377;</span></td>
         <td class="column6 style21 f">&nbsp;&nbsp;{{$bill['final_amount']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7"></td>
     </tr>
@@ -489,15 +481,15 @@
         <td class="column7"></td>
     </tr>
     <tr class="row45">
-        <td class="column0 style43 s style45" colspan="3">&nbsp;Interest will be charged @ 18% p.a., if the amount is not</td>
+        <td class="column0 style43 s style45" colspan="3">&nbsp;Interest will be charged @ 18% p.a., if the amount is not paid within 7 days.</td>
         <td class="column3 style19 null"></td>
-        <td class="column4 style32 null"></td>
+        <td class="column4 style32 null"><img src="{{$image}}"></td>
         <td class="column5 style32 null"></td>
         <td class="column6 style33 null"></td>
         <td class="column7"></td>
     </tr>
     <tr class="row46">
-        <td class="column0 style43 s style45" colspan="3">&nbsp;paid within 7 days.</td>
+        <td class="column0 style43 s style45" colspan="3">&nbsp;</td>
         <td class="column3 style46 s style46" colspan="4">&nbsp;For, {{$bill['company']['name']}}</td>
         <td class="column7"></td>
     </tr>

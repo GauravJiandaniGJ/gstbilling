@@ -300,13 +300,13 @@ class BillController extends Controller
 
             $after_igst_percent = 0;
 
-            $after_cgst = ($total_amount * $after_cgst_percent)/100;
+            $after_cgst = round(($total_amount * $after_cgst_percent)/100);
 
-            $after_sgst = ($total_amount * $after_sgst_percent)/100;
+            $after_sgst = round(($total_amount * $after_sgst_percent)/100);
 
             $after_igst = 0;
 
-            $total_gst = $after_cgst + $after_sgst + $after_igst;
+            $total_gst = round($after_cgst + $after_sgst + $after_igst);
 
             $bill_primary->update(array('final_amount' => $total_amount + $total_gst, 'after_cgst' => $after_cgst, 'after_sgst' => $after_sgst, 'after_igst' => $after_igst, 'total_gst' => $total_gst));
 
@@ -320,9 +320,9 @@ class BillController extends Controller
 
         $after_sgst = 0;
 
-        $after_igst = ($total_amount * $after_igst_percent)/100;
+        $after_igst = round(($total_amount * $after_igst_percent)/100);
 
-        $total_gst = $after_cgst + $after_sgst + $after_igst;
+        $total_gst = round($after_cgst + $after_sgst + $after_igst);
 
         $bill_primary->update(array('final_amount' => $total_amount + $total_gst, 'after_cgst' => $after_cgst, 'after_sgst' => $after_sgst, 'after_igst' => $after_igst, 'total_gst' => $total_gst));
 
@@ -454,6 +454,29 @@ class BillController extends Controller
 
         $bill['bill_date'] = implode('-', array_reverse(explode('-', $bill_date)));;
 
+
+
+
+        $bill_detaill = BillPrimary::with(['company'])->where('bill_no',$bill_no)->first();
+
+        if(!$bill_detaill)
+        {
+
+            return Helper::apiError("Can't fetch detail for bill no",null,404);
+
+        }
+
+        $company_short_name = $bill_detaill['company']['short_name'];
+
+        $year = date("Y");
+
+        $new_year = substr($year, -2);
+
+        $next_year = (int)$new_year + 1;
+
+        $gst = 'GST';
+        $bill['final_bill_no'] = "$company_short_name$gst/$bill_no/$new_year-$next_year";
+
         $bill_detail = BillDetail::where('bill_no',$bill_no)->where('name_of_product','!=',null)->get();
 
         $bill['bill_detail'] = $bill_detail;
@@ -520,9 +543,12 @@ class BillController extends Controller
             $in_word = $result . " Rupees  " . $points . " Paise only.";
         }
 
+
+        $image = public_path('signature.jpg');
+
         $in_words = explode(" ",$in_word);
 
-        $pdf->loadView('debit', ['bill' => $bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words]);
+        $pdf->loadView('debit', ['bill' => $bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words, 'image'=>$image]);
 
         return $pdf->download('bill.pdf');
 

@@ -181,7 +181,7 @@ class DebitController extends Controller
     public function addDebitDetails(Request $request, $debit_no)
     {
 
-        $input = $request->only('name_of_product', 'service_code', 'qty', 'rate', 'total_amount');
+        $input = $request->only('name_of_product', 'qty', 'rate', 'total_amount');
 
         $input['debit_no'] = $debit_no;
 
@@ -201,7 +201,7 @@ class DebitController extends Controller
     public function editDebitDetails(Request $request, $debit_no, $debit_detail_no)
     {
 
-        $input = $request->only('name_of_product', 'service_code', 'qty', 'rate', 'total_amount');
+        $input = $request->only('name_of_product', 'qty', 'rate', 'total_amount');
 
         $input = array_filter($input, function($value){
 
@@ -397,6 +397,29 @@ class DebitController extends Controller
 
         $debit_bill['debit_date'] = implode('-', array_reverse(explode('-', $debit_date)));;
 
+
+
+        $debit_detaill = DebitPrimary::with(['company'])->where('debit_no',$debit_no)->first();
+
+        if(!$debit_detaill)
+        {
+
+            return Helper::apiError("Can't fetch detail for debit no",null,404);
+
+        }
+
+        $company_short_name = $debit_detaill['company']['short_name'];
+
+        $year = date("Y");
+
+        $new_year = substr($year, -2);
+
+        $next_year = (int)$new_year + 1;
+
+        $debit_bill['final_debit_no'] = "$company_short_name/$debit_no";
+
+
+
         $debit_detail = DebitDetail::where('debit_no',$debit_no)->where('name_of_product','!=',null)->get();
 
         $debit_bill['debit_detail'] = $debit_detail;
@@ -464,7 +487,9 @@ class DebitController extends Controller
             $in_words = $result . "Rupees  " . $points . " Paise only.";
         }
 
-        $pdf->loadView('debit_final', ['debit' => $debit_bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words]);
+        $image = public_path('signature.jpg');
+
+        $pdf->loadView('debit_final', ['debit' => $debit_bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words,'image' => $image]);
 
         return $pdf->download('debit.pdf');
 

@@ -231,7 +231,7 @@
     <col class="col7">
     <tbody>
     <tr class="row1">
-        <td class="column0 style24 s style24" colspan="7"><br>{{$debit['company']['name']}}</td>
+        <td class="column0 style24 s style24" colspan="7"><br><br>{{$debit['company']['name']}}</td>
     </tr>
     <tr class="row2">
         <td class="column0 style59 s style59" colspan="7">CARGO HANDLING &amp; SHIPPING AGENT</td>
@@ -247,7 +247,7 @@
     </tr>
 
     <tr class="row6">
-        <td class="column0 style64 s style69" colspan="3" rowspan="2">BILL OF SUPPLY</td>
+        <td class="column0 style64 s style69" colspan="3" rowspan="2">REIMBURSEMENT</td>
         <td class="column3 style55 s style56" colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Original for Receipient</td>
         <td class="column7"></td>
     </tr>
@@ -257,7 +257,7 @@
     </tr>
     <tr class="row8">
         <td class="column0 style25 s style26" colspan="2">&nbsp;Serial No.&nbsp;:</td>
-        <td class="column2 style52 null style57" colspan="5">&nbsp;{{$debit['debit_no']}}</td>
+        <td class="column2 style52 null style57" colspan="5">&nbsp;{{$debit['final_debit_no']}}</td>
         <td class="column7"></td>
     </tr>
     <tr class="row9">
@@ -308,8 +308,8 @@
         <td class="column0 style20 s"><span style="font-weight:bold; color:#000000; font-family:'Calibri'; font-size:11pt">&nbsp;Sr. No.</span></td>
         <td class="column1 style35 s style63" colspan="3">&nbsp;Name of Product / Service</td>
         <td class="column4 style17 s">Qty</td>
-        <td class="column5 style17 s">Rate</td>
-        <td class="column6 style13 s">Value of Supply</td>
+        <td class="column5 style17 s">Rate <span id="rupee">&#8377;</span></td>
+        <td class="column6 style13 s">Value of Supply <span id="rupee">&#8377;</span></td>
         <td class="column7"></td>
     </tr>
     <tr class="row20">
@@ -330,7 +330,7 @@
             <td class="column1 style27 null style29" colspan="3">&nbsp;{{$detail['name_of_product']}}&nbsp;</td>
             <td class="column4 style9 null">{{$detail['qty']}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td class="column5 style4 null">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$detail['rate']}}</td>
-            <td class="column6 style5 null">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$detail['total_amount']}}</td>
+            <td class="column6 style5 null">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$detail['total_amount']}}</td>
             <td class="column7"></td>
         </tr>
 
@@ -392,8 +392,8 @@
 
     <tr class="row38">
         <td class="column0 style34 s style34" colspan="3">: Bank Details :</td>
-        <td class="column3 style35 s style36" colspan="2">&nbsp;Total Amount After Tax</td>
-        <td class="column5 style19 s"></td>
+        <td class="column3 style35 s style36" colspan="2">&nbsp;Total Amount</td>
+        <td class="column5 style19 s"><span id="rupee">&#8377;</span></td>
         <td class="column6 style14 f"><br>&nbsp;&nbsp;{{$total_amount}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td class="column7"></td>
     </tr>
@@ -418,7 +418,7 @@
     </tr>
     <tr class="row42">
         <td class="column0 style25 s style26" colspan="3">&nbsp;Terms &amp; Conditions :</td>
-        <td class="column3 style27 s style29" colspan="4"></td>
+        <td class="column3 style27 s style29" colspan="4"><img src="{{$image}}"></td>
         <td class="column7"></td>
     </tr>
     <tr class="row43">

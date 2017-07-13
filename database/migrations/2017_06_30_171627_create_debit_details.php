@@ -19,8 +19,6 @@ class CreateDebitDetails extends Migration
 
             $table->string('name_of_product')->nullable();
 
-            $table->integer('service_code')->nullable();
-
             $table->integer('qty')->nullable();
 
             $table->double('rate')->nullable();

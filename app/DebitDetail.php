@@ -10,7 +10,7 @@ class DebitDetail extends Model
     protected $table = 'debit_details';
 
     protected $fillable = [
-        'debit_no', 'name_of_product', 'service_code', 'qty', 'rate', 'total_amount'
+        'debit_no', 'name_of_product', 'qty', 'rate', 'total_amount'
     ];
 
     public function debitPrimary()

@@ -34,7 +34,7 @@ Route::group(['prefix' => 'client'], function (){
 
 Route::group(['prefix'=>'statement'],function() {
 
-    Route::post('/generateStatementPartywiseDebit', ['uses' => 'StatementController@generateStatementPartywiseDebit']);
+    Route::get('/generateStatementPartywiseDebit/{from_date}/{to_date}/{company}/{id}', ['uses' => 'StatementController@generateStatementPartywiseDebit']);
 
     Route::post('/generateStatementPartywiseBill', ['uses' => 'StatementController@generateStatementPartywiseBill']);
 
@@ -42,7 +42,7 @@ Route::group(['prefix'=>'statement'],function() {
 
     Route::get('/listOfStatementClientWise', ['uses' => 'StatementController@listOfStatementClientWise']);
 
-    Route::post('/generateStatement', ['uses' => 'StatementController@generateStatement']);
+    Route::get('/generateStatement/{from_date}/{to_date}/{company}/{id}', ['uses' => 'StatementController@generateStatement']);
 
 });
 
@@ -140,19 +140,21 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 
     Route::get('/printDebit/{debit_no}', ['uses' => 'DebitController@printDebit']);
 
-    Route::patch('/updatePrimary/{bill_no}', ['uses' => 'DebitController@updatePrimary']);
 
     Route::post('/addDebitDetails/{debit_no}', ['uses' => 'DebitController@addDebitDetails']);
-
-    Route::patch('/editDebitDetails/{debit_no}/{debit_detail_no}', ['uses' => 'DebitController@editDebitDetails']);
-
-    Route::delete('/deleteDebitDetail/{debit_detail_no}', ['uses' => 'DebitController@deleteDebitDetail']);
 
     Route::get('/quantityTotal/{debit_no}','DebitController@quantityTotal');
 
     Route::get('/amountTotal/{debit_no}','DebitController@amountTotal');
 
     Route::get('/getDebitDetails/{debit_no}', ['uses' => 'DebitController@getDebitDetails']);
+
+    Route::patch('/updatePrimary/{bill_no}', ['uses' => 'DebitController@updatePrimary']);
+
+    Route::patch('/editDebitDetails/{debit_no}/{debit_detail_no}', ['uses' => 'DebitController@editDebitDetails']);
+
+    Route::delete('/deleteDebitDetail/{debit_detail_no}', ['uses' => 'DebitController@deleteDebitDetail']);
+
 
 
 });
@@ -178,16 +180,19 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
     Route::get('/printGSTBill/{debit_no}', ['uses' => 'BillController@printGSTBill']);
 
 
-    Route::patch('/updatePrimary/bill/{bill_no}', ['uses' => 'BillController@updatePrimary']);
+    Route::patch('/updatePrimary/{bill_no}', ['uses' => 'BillController@updatePrimary']);
 
     Route::post('/addBillDetails/{bill_no}', ['uses' => 'BillController@addBillDetails']);
 
-    Route::patch('/editBillDetails/bill/{bill_no}/{bill_detail_no}', ['uses' => 'BillController@editBillDetails']);
+    Route::patch('/editBillDetails/{bill_no}/{bill_detail_no}', ['uses' => 'BillController@editBillDetails']);
 
-    Route::delete('/deleteBillDetail/bill/{bill_detail_no}', ['uses' => 'BillController@deleteBillDetail']);
+    Route::delete('/deleteBillDetail/{bill_detail_no}', ['uses' => 'BillController@deleteBillDetail']);
 
-    Route::get('/getBillDetails/bill/{bill_no}', ['uses' => 'BillController@getBillDetails']);
+    Route::get('/getBillDetails/{bill_no}', ['uses' => 'BillController@getBillDetails']);
 
+    Route::get('/quantityTotal/{bill_no}','BillController@quantityTotal');
+
+    Route::get('/amountTotal/{bill_no}','BillController@amountTotal');
 
 
 });
@@ -205,10 +210,3 @@ Route::patch('/shortcut/update/{sid}', ['uses' => 'ShortcutController@update']);
 
 
 Route::get('pdf','StatementController@pdf');
-
-Route::get('/bill/quantityTotal/{bill_no}','BillController@quantityTotal');
-
-Route::get('/bill/amountTotal/{bill_no}','BillController@amountTotal');
-
-Route::get('/amountTotal/{debit_no}','DebitController@amountTotal');
-

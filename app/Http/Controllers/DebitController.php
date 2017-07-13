@@ -18,7 +18,18 @@ class DebitController extends Controller
     public function debitList($company_id, $financial_year, $financial_month)
     {
 
-        $list = DebitPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','final')->get();
+        if($company_id != 1)
+        {
+
+            $list = BGRBHRDebitPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','final')->get();
+
+        }
+        else
+        {
+
+            $list = DebitPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','final')->get();
+
+        }
 
         if(!$list)
         {
@@ -77,7 +88,19 @@ class DebitController extends Controller
     public function debitListPending($company_id, $financial_year, $financial_month)
     {
 
-        $list = DebitPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','!=','final')->get();
+
+        if($company_id != 1)
+        {
+
+            $list = BGRBHRDebitPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','!=','final')->get();
+
+        }
+        else
+        {
+
+            $list = DebitPrimary::with(['company','client_address.client'])->where('company_id',$company_id)->where('financial_year_id',$financial_year)->where('financial_month_id',$financial_month)->where('status','!=','final')->get();
+
+        }
 
         if(!$list)
         {

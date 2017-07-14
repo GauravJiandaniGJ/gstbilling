@@ -20,7 +20,7 @@
 </head>
 <body>
 <h1>{{$debit_details[0]['company']['name']}}</h1>
-<h2>Statement Entirely</h2>
+<h2>Statement Debit</h2>
 <table border="1" width="100%">
     <tr>
         <td>

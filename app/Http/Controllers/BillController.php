@@ -83,6 +83,75 @@ class BillController extends Controller
 
     }
 
+    public function deleteBillPrimary($company_id, $financial_year, $financial_month,  $bill_no)
+    {
+
+        if($company_id != 1)
+        {
+
+            $bill_detail = BGRBHRBillDetail::where('bill_no',$bill_no)->get();
+
+            if(!$bill_detail)
+            {
+
+                return Helper::apiError("No Bill detail found!",null,404);
+
+            }
+
+            foreach ($bill_detail as $single)
+            {
+
+                $single->delete();
+
+            }
+
+            $bill_primary = BGRBHRBillPrimary::where('bill_no',$bill_no)->first();
+
+            if(!$bill_primary)
+            {
+
+                return Helper::apiError("Not Found!",null,404);
+
+            }
+
+            $bill_primary->delete();
+
+            return response("",204);
+
+        }
+
+        $bill_detail = BillDetail::where('bill_no',$bill_no)->get();
+
+        if(!$bill_detail)
+        {
+
+            return Helper::apiError("No Bill detail found!",null,404);
+
+        }
+
+        foreach ($bill_detail as $single)
+        {
+
+            $single->delete();
+
+        }
+
+        $bill_primary = BillPrimary::where('bill_no',$bill_no)->first();
+
+        if(!$bill_primary)
+        {
+
+            return Helper::apiError("Not Found!",null,404);
+
+        }
+
+        $bill_primary->delete();
+
+        return response("",204);
+
+    }
+
+
     public function latestBillNo($company_id, $financial_year, $financial_month)
     {
 

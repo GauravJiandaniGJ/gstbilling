@@ -29,6 +29,8 @@ class UsersController extends Controller
     {
         $input = $request->only('name', 'email', 'password', 'role');
 
+        $input['password'] = bcrypt($input['password']);
+
         $check_if_user_exist = User::where('email',$input['email'])->first();
 
         if(sizeof($check_if_user_exist)!=0)

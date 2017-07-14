@@ -379,6 +379,75 @@ class DebitController extends Controller
 
     }
 
+    public function deleteDebitPrimary($company_id, $financial_year, $financial_month,  $debit_no)
+    {
+
+        if($company_id != 1)
+        {
+
+            $debit_detail = BGRBHRDebitDetail::where('debit_no',$debit_no)->get();
+
+            if(!$debit_detail)
+            {
+
+                return Helper::apiError("No Bill detail found!",null,404);
+
+            }
+
+            foreach ($debit_detail as $single)
+            {
+
+                $single->delete();
+
+            }
+
+            $debit_primary = BGRBHRDebitPrimary::where('debit_no',$debit_no)->first();
+
+            if(!$debit_primary)
+            {
+
+                return Helper::apiError("Not Found!",null,404);
+
+            }
+
+            $debit_primary->delete();
+
+            return response("",204);
+
+        }
+
+        $debit_detail = DebitDetail::where('debit_no',$debit_no)->get();
+
+        if(!$debit_detail)
+        {
+
+            return Helper::apiError("No Bill detail found!",null,404);
+
+        }
+
+        foreach ($debit_detail as $single)
+        {
+
+            $single->delete();
+
+        }
+
+        $debit_primary = DebitPrimary::where('debit_no',$debit_no)->first();
+
+        if(!$debit_primary)
+        {
+
+            return Helper::apiError("Not Found!",null,404);
+
+        }
+
+        $debit_primary->delete();
+
+        return response("",204);
+
+    }
+
+
     public function calculateTotalAmount($company_id, $financial_year, $financial_month, $debit_no)
     {
 

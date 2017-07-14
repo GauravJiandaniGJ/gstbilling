@@ -140,6 +140,9 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
 
     Route::get('/printDebit/{debit_no}', ['uses' => 'DebitController@printDebit']);
 
+    Route::delete('/deleteDebitPrimary/{debit_no}', ['uses' => 'DebitController@deleteDebitPrimary']);
+
+
 
     Route::post('/addDebitDetails/{debit_no}', ['uses' => 'DebitController@addDebitDetails']);
 
@@ -178,6 +181,9 @@ Route::group(['prefix'=>'company/{company_id}/year/{financial_year}/month/{finan
     Route::get('/latestBillNo', ['uses' => 'BillController@latestBillNo']);
 
     Route::get('/printGSTBill/{debit_no}', ['uses' => 'BillController@printGSTBill']);
+
+    Route::delete('/deleteBillPrimary/{bill_no}', ['uses' => 'BillController@deleteBillPrimary']);
+
 
 
     Route::patch('/updatePrimary/{bill_no}', ['uses' => 'BillController@updatePrimary']);

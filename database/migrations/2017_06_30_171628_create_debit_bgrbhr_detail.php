@@ -14,7 +14,7 @@ class CreateDebitBgrbhrDetail extends Migration
             $table->increments('id');
 
             $table->integer('debit_no')->unsigned();
-            $table->foreign('debit_no')->references('debit_no')->on('debit_primary');
+            $table->foreign('debit_no')->references('debit_no')->on('debit_bgrbhr_primary');
 
 
             $table->string('name_of_product')->nullable();

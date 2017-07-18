@@ -431,7 +431,7 @@
         <td class="column7">&nbsp;</td>
     </tr>
     <tr class="row38">
-        <td class="column0 style43 null style44" colspan="3"> &nbsp;{{ $in_words[7]}} {{  $in_words[8] }} {{ $in_words[9]}} {{ $in_words[10]}}</td>
+        <td class="column0 style43 null style44" colspan="3"> &nbsp;{{ $in_words[7]}} {{  $in_words[8] }} {{ $in_words[9]}} </td>
         <td class="column3 style34 s">&nbsp;Add : IGST</td>
         <td class="column4 style10 n">0%</td>
         <td class="column5 style11 s"></td>

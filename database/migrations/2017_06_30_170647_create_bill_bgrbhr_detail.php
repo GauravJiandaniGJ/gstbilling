@@ -14,7 +14,7 @@ class CreateBillBgrbhrDetail extends Migration
             $table->increments('id');
 
             $table->integer('bill_no')->unsigned();
-            $table->foreign('bill_no')->references('bill_no')->on('bills_primary');
+            $table->foreign('bill_no')->references('bill_no')->on('bill_bgrbhr_primary');
 
             $table->string('name_of_product')->nullable();
 

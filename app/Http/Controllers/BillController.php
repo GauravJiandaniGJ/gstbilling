@@ -857,9 +857,10 @@ class BillController extends Controller
 
         $in_words = explode(" ",$in_word);
 
-        if(sizeof($in_words)==4)
+        if(sizeof($in_words)==3)
         {
 
+            array_push($in_words,"");
             array_push($in_words,"");
             array_push($in_words,"");
             array_push($in_words,"");
@@ -875,11 +876,13 @@ class BillController extends Controller
             array_push($in_words,"");
             array_push($in_words,"");
             array_push($in_words,"");
+            array_push($in_words,"");
 
         }
         else if(sizeof($in_words)==5)
         {
 
+            array_push($in_words,"");
             array_push($in_words,"");
             array_push($in_words,"");
             array_push($in_words,"");
@@ -892,11 +895,13 @@ class BillController extends Controller
             array_push($in_words,"");
             array_push($in_words,"");
             array_push($in_words,"");
+            array_push($in_words,"");
 
         }
         else if(sizeof($in_words)==7)
         {
 
+            array_push($in_words,"");
             array_push($in_words,"");
             array_push($in_words,"");
 

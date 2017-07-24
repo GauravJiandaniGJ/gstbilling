@@ -906,6 +906,19 @@ class BillController extends Controller
             array_push($in_words,"");
 
         }
+        else if(sizeof($in_words)==8)
+        {
+
+            array_push($in_words,"");
+            array_push($in_words,"");
+
+        }
+        else if(sizeof($in_words)==9)
+        {
+
+            array_push($in_words,"");
+
+        }
 
         $pdf->loadView('debit', ['bill' => $bill, 'i' => $i, 'qty_total' => $total_qty, 'total_amount' => $total_amt, 'in_words' => $in_words, 'image'=>$image]);
 

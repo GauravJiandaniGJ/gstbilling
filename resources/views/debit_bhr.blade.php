@@ -117,6 +117,7 @@
         td.style47 { vertical-align:top; text-align:left; padding-left:0px; border-bottom:1px solid #000000 !important; border-top:none #000000; border-left:none #000000; border-right:1px solid #000000 !important; color:#000000; font-family:'Calibri'; font-size:10pt; background-color:white }
         th.style47 { vertical-align:top; text-align:left; padding-left:0px; border-bottom:1px solid #000000 !important; border-top:none #000000; border-left:none #000000; border-right:1px solid #000000 !important; color:#000000; font-family:'Calibri'; font-size:10pt; background-color:white }
         td.style48 { vertical-align:top; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:1px solid #000000 !important; border-left:1px solid #000000 !important; border-right:none #000000; color:#000000; font-family:'Calibri'; font-size:8pt; background-color:white }
+        td.stylegj { vertical-align:top; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:1px solid #000000 !important; border-left:1px solid #000000 !important; border-right:none #000000; color:#000000; font-family:'Calibri'; font-size:9pt; background-color:white }
         th.style48 { vertical-align:top; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:1px solid #000000 !important; border-left:1px solid #000000 !important; border-right:none #000000; color:#000000; font-family:'Calibri'; font-size:8pt; background-color:white }
         td.style49 { vertical-align:top; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:1px solid #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Calibri'; font-size:8pt; background-color:white }
         th.style49 { vertical-align:top; text-align:left; padding-left:0px; border-bottom:none #000000; border-top:1px solid #000000 !important; border-left:none #000000; border-right:none #000000; color:#000000; font-family:'Calibri'; font-size:8pt; background-color:white }
@@ -332,7 +333,6 @@
 
     @endforeach
 
-
     <tr class="row30">
         <td class="column0 style3 null"></td>
         <td class="column1 style27 null style29" colspan="3"></td>
@@ -341,7 +341,6 @@
         <td class="column6 style5 null"></td>
         <td class="column7">&nbsp;</td>
     </tr>
-
 
     <tr class="row33">
         <td class="column0 style53 s style58" colspan="4">Total :&nbsp;</td>
@@ -363,7 +362,7 @@
         <td class="column7"></td>
     </tr>
     <tr class="row34">
-        <td class="column0 style43 null style43" colspan="7">&nbsp;</td>
+        <td class="column0 stylegj s style43" colspan="7">Note: The above payments are done by us as a Clearing-Forwarding Agent i.e. Pure Agent and thus the above amounts are not considered as supply and not liable for GST. Also, do not deduct TDS on above payments as it is not our income and not included in Turnover. <span style="font-weight:bold; color:#000000; font-family:'Trebuchet MS'; font-size:9pt"></span></td>
         <td class="column7"></td>
     </tr>
 

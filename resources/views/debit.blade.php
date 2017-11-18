@@ -360,15 +360,6 @@
         <td class="column6 style23 f"></td>
         <td class="column7"></td>
     </tr>
-    <tr class="row22">
-        <td class="column0 style3 null"></td>
-        <td class="column1 style43 null style44" colspan="2"></td>
-        <td class="column3 style26 null"></td>
-        <td class="column4 style13 null"></td>
-        <td class="column5 style4 null"></td>
-        <td class="column6 style5 null"></td>
-        <td class="column7">&nbsp;</td>
-    </tr>
 
     {{$i=0}}
     @foreach ($bill['bill_detail'] as $detail)
@@ -379,7 +370,7 @@
         <td class="column1 style43 null style44" colspan="2">&nbsp;{{$detail['name_of_product']}}&nbsp;</td>
         <td class="column3 style26 null">&nbsp;&nbsp;{{$detail['service_code']}}</td>
         <td class="column4 style13 null">{{$detail['qty']}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        <td class="column5 style4 null">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$detail['rate']}}</td>
+        <td class="column5 style4 null">&nbsp;{{$detail['rate']}}</td>
         <td class="column6 style5 null">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{$detail['total_amount']}}</td>
         <td class="column7"></td>
     </tr>
@@ -400,7 +391,7 @@
         <td class="column3 style28 null"></td>
         <td class="column4 style16 f">&nbsp;&nbsp;{{$qty_total}} &nbsp;&nbsp;&nbsp;</td>
         <td class="column5 style8 null"></td>
-        <td class="column6 style21 f">&nbsp;&nbsp; {{$total_amount}}&nbsp;&nbsp;&nbsp;</td>
+        <td class="column6 style21 f">&nbsp;&nbsp;{{$total_amount}}&nbsp;</td>
         <td class="column7">&nbsp;</td>
     </tr>
     <tr class="row34">
@@ -411,29 +402,29 @@
         <td class="column0 style41 s style42" colspan="3">&nbsp;Total Invoice Amount in Words:</td>
         <td class="column3 style41 s style42" colspan="2">Total Amount Before Tax</td>
         <td class="column5 style9 s"><span id="rupee">&#8377;</span></td>
-        <td class="column6 style21 f">&nbsp;&nbsp;{{$total_amount}}&nbsp;&nbsp;&nbsp;</td>
+        <td class="column6 style21 f">&nbsp;{{$total_amount}}&nbsp;&nbsp;</td>
         <td class="column7">&nbsp;</td>
     </tr>
     <tr class="row36">
         <td class="column0 style43 null style44" colspan="3">&nbsp;{{$in_words[0]}} {{ $in_words[1]}} {{ $in_words[2]}}</td>
-        <td class="column3 style34 s">&nbsp;Add : CGST</td>
-        <td class="column4 style10 n">9%</td>
+        <td class="column3 style34 s"></td>
+        <td class="column4 style10 n">Add : CGST 9%</td>
         <td class="column5 style11 s"></td>
         <td class="column6 style22 f">&nbsp;&nbsp;{{$bill['after_cgst']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7">&nbsp;</td>
     </tr>
     <tr class="row37">
         <td class="column0 style43 null style44" colspan="3">&nbsp;{{ $in_words[3]}} {{ $in_words[4]}} {{ $in_words[5]}} {{ $in_words[6]}}</td>
-        <td class="column3 style34 s">&nbsp;Add : SGST</td>
-        <td class="column4 style10 n">9%</td>
+        <td class="column3 style34 s"></td>
+        <td class="column4 style10 n">Add : SGST 9%</td>
         <td class="column5 style11 s"></td>
         <td class="column6 style22 f">&nbsp;&nbsp;{{$bill['after_sgst']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7">&nbsp;</td>
     </tr>
     <tr class="row38">
         <td class="column0 style43 null style44" colspan="3"> &nbsp;{{ $in_words[7]}} {{  $in_words[8] }} {{ $in_words[9]}} </td>
-        <td class="column3 style34 s">&nbsp;Add : IGST</td>
-        <td class="column4 style10 n">0%</td>
+        <td class="column3 style34 s"></td>
+        <td class="column4 style10 n">Add : IGST 0%</td>
         <td class="column5 style11 s"></td>
         <td class="column6 style22 f">{{$bill['after_igst']}}&nbsp;&nbsp;&nbsp;</td>
         <td class="column7"></td>

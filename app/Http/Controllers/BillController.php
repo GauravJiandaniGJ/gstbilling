@@ -753,7 +753,7 @@ class BillController extends Controller
         $next_year = (int)$new_year + 1;
 
         $gst = 'G';
-        $bill['final_bill_no'] = "$company_short_name/$gst/$bill_no/$new_year-$next_year";
+        $bill['final_bill_no'] = "$company_short_name/$gst/$bill_no/17-18";
 
         if($company_id != 1)
         {

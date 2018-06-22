@@ -266,7 +266,7 @@
         <td class="column7"></td>
     </tr>
     <tr class="row3">
-        <td class="column0 style80 s style80" colspan="7">Office No. 203, 2nd Floor, Plot No. 212, Ward - 12/B, Gandhidham - Kachchh</td>
+        <td class="column0 style80 s style80" colspan="7">"BGR BHAWAN", Plot no. 140, Ward - 7/A, Tenament 1, Gandhidham - Kutch (370201)</td>
         <td class="column7"></td>
     </tr>
     <tr class="row4">
